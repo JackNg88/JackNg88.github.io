@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expertise | Jian Wu</title>
+<meta name="description" content="Technical expertise of Jian Wu — R, Python, single-cell genomics, epigenomics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Jian Wu</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <div class="nav-drop">
+        <button>Research ▾</button>
+        <div class="nav-drop-menu">
+          <a href="experience.html">Experience</a>
+          <a href="publications.html">Publications</a>
+          <a href="conferences.html">Conferences</a>
+        </div>
+      </div>
+      <a href="expertise.html">Expertise</a>
+      <a href="tutorials.html">Tutorials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-tools">
+      <button onclick="toggleDark()" title="Dark mode">🌙</button>
+      <button class="nav-burger" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="full-wrap">
+  <div class="page-header">
+    <h1>Expertise</h1>
+    <p>Technical skills across programming, single-cell genomics and epigenomics</p>
+  </div>
+
+  <div class="section">
+    <h2 class="sec-title"><span class="sec-icon">🛠️</span> Skills</h2>
+    <div class="exp-grid" id="expertiseGrid"></div>
+
+    <div style="margin-top:1.5rem;padding:1.1rem;background:rgba(27,58,45,.04);border-radius:var(--radius);border:1px solid rgba(27,58,45,.1)">
+      <p style="margin:0;font-size:.87rem;color:var(--text-2)">
+        <strong>General expertise:</strong> Statistical analysis of large omics datasets · Strong molecular biology background · Familiarity with genomic data and approaches for high-dimensional data analysis, including scRNA-seq (spatial), bulk RNA-seq, ATAC-seq, HiC, and ChIP-seq.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 Jian Wu · CPI / CIGL · JLU Gießen · MPI-BN ·
+  <a href="https://github.com/JackNg88/jackng833" target="_blank">GitHub</a> ·
+  <a href="https://orcid.org/0000-0003-4720-2374" target="_blank">ORCID</a>
+</footer>
+
+<script src="assets/js/data/expertise.js"></script>
+<script src="assets/js/render.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  renderExpertise('expertiseGrid', expertiseData);
+</script>
+</body>
+</html>
