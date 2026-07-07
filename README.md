@@ -1,17 +1,17 @@
-# jackng833 — Jian Wu 学术主页（多页版 + 相册/播客）
+# JackNg88.github.io — Jian Wu 学术主页（多页版 + 相册/播客）
 
 个人学术主页，风格延续深森绿 (`#1b3a2d`) + 铜色 (`#c17f5a`) 配色。
 采用"数据驱动"架构：新增论文/会议/教程/照片，只需编辑 `assets/js/data/` 里的
 一个 JS 数组，无需改动任何 HTML/CSS。
 
-**在线访问：** https://jackng88.github.io/jackng833/
+**在线访问：** https://jackng88.github.io/
 
 ---
 
 ## 📁 目录结构
 
 ```
-jackng833/
+JackNg88.github.io/
 ├─ index.html                首页 —— 头像/简介 + Featured Publications + 最新教程
 ├─ experience.html           科研与工作经历（时间线）
 ├─ publications.html         全部论文列表
@@ -55,7 +55,8 @@ jackng833/
 | **样式集中管理** | 只有一份 `style.css`，换整站配色只需改文件顶部 `:root` 里的几个 CSS 变量 |
 | **暗色模式内置** | 右上角🌙按钮切换，状态存在浏览器本地，刷新页面不会丢失 |
 | **Gallery 双重分类统计** | 按「类型（照片/视频）」和「来源（本地/Google Drive）」两排独立 Tab 筛选，每个 Tab 上都带实时数量徽章，两排可以同时组合筛选 |
-| **Contact 页嵌入地图** | 支持 Google Maps 嵌入（含免费简单版和 API Key 完整版两种方式），默认卫星混合视图 |
+| **Contact 页嵌入地图** | Google Maps 免费嵌入（无需 API Key/无需绑卡），默认卫星混合视图 |
+| **用户主页部署** | 仓库名精确匹配 `JackNg88.github.io`，GitHub 自动识别为用户主页，无需手动配置 Pages 分支，网址简洁无二级路径 |
 
 ---
 
@@ -137,24 +138,18 @@ https://drive.google.com/file/d/1AbCDefGhIJKLmnop/view?usp=sharing
 
 ---
 
-## 📍 Contact 页面地图（Google Maps）
+## 📍 Contact 页面地图（Google Maps，免费版）
 
-`contact.html` 里嵌入了 Google Maps，显示 CPI/CIGL 办公地址。有两种实现方式：
+`contact.html` 里嵌入了 Google Maps，显示 CPI/CIGL 办公地址，采用**免费嵌入方式**：
 
-### 方式 A — 免费简单版（无需 API Key）
 ```html
 <iframe src="https://www.google.com/maps?q=地址&t=h&output=embed"></iframe>
 ```
-- `t=h` 参数指定默认显示**卫星+街道名混合视图**（去掉此参数则是普通地图模式）
-- 无需注册、无需绑卡，缺点是没有侧边地点信息卡和"获取路线"按钮
 
-### 方式 B — API Key 完整版（当前使用）
-```html
-<iframe src="https://www.google.com/maps/embed/v1/place?key=你的KEY&q=地址"></iframe>
-```
-- 需要在 [Google Cloud Console](https://console.cloud.google.com/) 申请免费 API Key（每月 28,500 次免费请求额度，个人主页用量完全够用）
-- 优点：带侧边地点信息卡、"获取路线"导航按钮
-- 申请后记得在 API Key 设置里限制「网站限制」为你的域名（`https://jackng88.github.io/*`），防止被盗用
+- **无需申请 API Key，无需绑定信用卡**
+- `t=h` 参数指定默认显示**卫星 + 街道名混合视图**（去掉此参数则是普通地图模式，`t=k` 是纯卫星图无标注）
+- 用户可以在嵌入的地图里自由缩放、拖动、切换图层模式
+- 局限：没有侧边地点信息卡和"获取路线"导航按钮（如果需要这些高级功能，可以改用 Google Maps Embed API + API Key 的完整版，需要在 [Google Cloud Console](https://console.cloud.google.com/) 申请，详见 Google 官方文档）
 
 ---
 
@@ -177,36 +172,30 @@ https://drive.google.com/file/d/1AbCDefGhIJKLmnop/view?usp=sharing
 
 ---
 
-## 🚀 部署到 GitHub Pages
+## 🚀 部署到 GitHub Pages（用户主页方式）
 
-### 首次部署（新仓库）
+本仓库使用 GitHub 的「用户主页」（User Site）规则部署：
 
-**第一步 —— 创建仓库**
-打开 [github.com/new](https://github.com/new)，仓库名填 `jackng833` → Create repository
-
-**第二步 —— 上传文件**
-仓库页面点 **Add file → Upload files**，把本地整个项目文件夹里的所有内容
-（`index.html`、`experience.html`……以及 `assets/` 整个文件夹）一次性拖进去，
-保持原有的文件夹层级结构 → **Commit changes**
-
-**第三步 —— 开启 Pages**
-仓库 → **Settings** → 左侧 **Pages** → Source 选择 `Deploy from a branch` →
-Branch 选 `main` / `(root)` → **Save**
-
-约 2 分钟后访问：**`https://jackng88.github.io/jackng833/`**
+- 仓库名**必须**精确等于 `你的GitHub用户名.github.io`（本仓库对应 `JackNg88.github.io`）
+- 一个 GitHub 账号**只能有一个**这种用户主页仓库
+- **不需要**手动去 Settings → Pages 设置分支，只要仓库名匹配规则，GitHub 会自动识别并部署
+- 网址是最简洁的根路径形式：`https://jackng88.github.io/`（没有额外的项目名路径）
 
 ### 日常更新已上线的网站
 
-改好本地文件后，两种方式同步到线上：
+**方式 A —— GitHub Desktop（推荐，图形界面无需命令行）**
+1. 本地修改好文件
+2. 打开 GitHub Desktop，确认 Current Repository 是 `JackNg88.github.io`
+3. 左侧 Changes 会自动列出改动的文件
+4. 填写 Commit 说明 → 点击 **Commit to main**
+5. 点击 **Push origin**
+6. 约 1-3 分钟后线上自动更新
 
-**方式 A —— 网页手动更新（适合改动少量文件）**
-1. 打开仓库 → 找到要更新的文件（比如 `index.html`）
-2. 点击文件 → 右上角铅笔图标 ✏️（Edit this file）
-3. 全选删除原内容 → 粘贴本地新内容
-4. 拉到底部 → **Commit changes**
-5. 约 1-2 分钟后线上自动更新
+**方式 B —— 网页手动编辑（适合改动单个文件）**
+1. 打开仓库 → 点击要改的文件 → 右上角铅笔图标 ✏️
+2. 编辑内容 → 拉到底部 **Commit changes**
 
-**方式 B —— 批量重新上传（适合改动多个文件）**
+**方式 C —— 批量重新上传（适合改动多个文件）**
 1. 仓库首页 → **Add file → Upload files**
 2. 把改动过的文件重新拖进去（文件名相同会自动覆盖旧版本）
 3. **Commit changes**
@@ -232,11 +221,13 @@ python3 -m http.server 8000
 | 某张图片显示黑色方块 | 图片文件不存在或路径/文件名大小写不匹配 | 检查 `assets/img/gallery/` 文件夹里文件是否真实存在，文件名大小写是否完全一致 |
 | Google Drive 图片/视频显示"无权限" | 共享权限没设置为"知道链接的任何人" | 回到 Drive 重新设置共享权限为 Viewer + Anyone with the link |
 | Tab 数量统计显示 `—` 不是数字 | render.js 没有加载成功或版本过旧 | 确认 `assets/js/render.js` 是最新完整版本，且在 HTML 里的引入顺序是 `data → render.js → main.js` |
-| 页面顶部内容被导航栏遮挡 | CSS `calc()` 函数里加号/减号前后缺少空格 | `calc()` 里必须写成 `calc(var(--nav-h) + 2rem)`，而不是 `calc(var(--nav-h)+2rem)`（无空格会导致整条声明失效） |
+| 页面顶部内容被导航栏遮挡 | CSS `calc()` 函数里加号/减号前后缺少空格 | `calc()` 里必须写成 `calc(var(--nav-h) + 2rem)`，无空格会导致整条声明失效 |
 | 某个联系方式排版占了一整行，导致后面项目错位 | HTML 里该项带了 `ct-row-full` 这个 class | 如果不需要横跨整行显示，去掉 `ct-row-full`，改回普通的 `class="ct-row"` |
 | 浏览器窗口显示网页比预期小，四周有大片空白 | 浏览器窗口本身没有最大化（不是网页问题） | 双击浏览器标题栏或点击绿色圆点按钮让窗口铺满屏幕；网页内容本身的 `max-width` 限制是刻意设计，保证宽屏下阅读体验 |
+| 表单提交后跳转到 404 页面 | `contact.html` 里 `_next` 隐藏字段的链接路径不对 | 确认是 `https://jackng88.github.io/index.html`（根路径，不带任何仓库名） |
+| Footer/头部 GitHub 图标链接打不开 | 链接还指向旧的项目页面仓库名 | 全局搜索检查是否还有残留的旧仓库名，统一替换为 `JackNg88.github.io` |
 | 保存的 .html 文件打不开 | 记事本/TextEdit 保存时格式或编码不对 | Windows 记事本另存为要选"所有文件(*.*)"；Mac TextEdit 要先切换"制作纯文本" |
 
 ---
 
-© 2025 Jian Wu · CPI / MPI-BN · JLU Gießen · DZL · ILH
+© 2025 Jian Wu · CPI / MPI-BN · JLU Gießen · DZL / ILH

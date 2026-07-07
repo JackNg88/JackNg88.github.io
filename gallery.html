@@ -42,7 +42,6 @@
     <p>Photos &amp; videos — life, fieldwork, and conferences</p>
   </div>
 
-  <!-- 类型筛选（照片/视频）-->
   <div class="gal-tabs-row">
     <span class="gal-tab-label">Type</span>
     <div class="gal-tab active" data-filter-key="type" data-filter-val="all" onclick="setTypeFilter('all', this)">
@@ -56,7 +55,6 @@
     </div>
   </div>
 
-  <!-- 来源筛选（本地/Drive）-->
   <div class="gal-tabs-row">
     <span class="gal-tab-label">Source</span>
     <div class="gal-tab active" data-filter-key="source" data-filter-val="all" onclick="setSourceFilter('all', this)">
@@ -80,17 +78,15 @@
 
 <footer>
   © 2025 Jian Wu · CPI / CIGL · JLU Gießen · MPI-BN ·
-  <a href="https://github.com/JackNg88/jackng833" target="_blank">GitHub</a>
+  <a href="https://github.com/JackNg88/JackNg88.github.io" target="_blank">GitHub</a>
 </footer>
 
 <script src="assets/js/data/gallery.js"></script>
 <script src="assets/js/render.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
-  /* 当前筛选状态 */
   const currentFilters = { type: 'all', source: 'all' };
 
-  /* 初始化：计算数量并填入 Tab 徽章 */
   (function initCounts(){
     const counts = getGalleryCounts(galleryData);
     document.getElementById('count-type-all').textContent   = counts.all;
@@ -101,10 +97,8 @@
     document.getElementById('count-source-drive').textContent = counts.drive;
   })();
 
-  /* 首次渲染：全部显示 */
   renderGallery('galGrid', galleryData, currentFilters);
 
-  /* 类型 Tab 点击 */
   function setTypeFilter(type, btn){
     currentFilters.type = type;
     document.querySelectorAll('.gal-tab[data-filter-key="type"]').forEach(t => t.classList.remove('active'));
@@ -112,7 +106,6 @@
     renderGallery('galGrid', galleryData, currentFilters);
   }
 
-  /* 来源 Tab 点击 */
   function setSourceFilter(source, btn){
     currentFilters.source = source;
     document.querySelectorAll('.gal-tab[data-filter-key="source"]').forEach(t => t.classList.remove('active'));
