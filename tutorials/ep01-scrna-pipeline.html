@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ep.01 — scRNA-seq 分析流程 | Jian Wu</title>
+<title>Ep.01 — Building an scRNA-seq Analysis Pipeline | Jian Wu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -40,13 +40,13 @@
 
 <div class="full-wrap">
   <div class="page-header">
-    <h1>Ep.01 — 如何从零开始搭建 scRNA-seq 分析流程</h1>
+    <h1>Ep.01 — Building an scRNA-seq Analysis Pipeline from Scratch</h1>
     <p>2025-01-01</p>
   </div>
 
   <div class="section">
-    <h2 class="sec-title"><span>1️⃣</span> 从 FASTQ 到 Count Matrix</h2>
-    <p>使用 CellRanger（10x Genomics 数据）或 STARsolo 进行比对与定量：</p>
+    <h2 class="sec-title"><span>1️⃣</span> From FASTQ to Count Matrix</h2>
+    <p>Use CellRanger (for 10x Genomics data) or STARsolo for alignment and quantification:</p>
     <pre>cellranger count --id=sample1 \
   --transcriptome=refdata-gex-GRCh38 \
   --fastqs=/path/to/fastq \
@@ -54,8 +54,8 @@
   </div>
 
   <div class="section">
-    <h2 class="sec-title"><span>2️⃣</span> 质控（QC）</h2>
-    <p>在 R 中使用 Seurat 读入数据并进行基本质控：</p>
+    <h2 class="sec-title"><span>2️⃣</span> Quality Control (QC)</h2>
+    <p>Load the data in R using Seurat and perform basic quality control:</p>
     <pre>library(Seurat)
 obj &lt;- Read10X("path/to/filtered_feature_bc_matrix")
 obj &lt;- CreateSeuratObject(obj, min.cells=3, min.features=200)
@@ -64,16 +64,16 @@ obj &lt;- subset(obj, nFeature_RNA &gt; 200 & percent.mt &lt; 15)</pre>
   </div>
 
   <div class="section">
-    <h2 class="sec-title"><span>3️⃣</span> 标准化与聚类</h2>
+    <h2 class="sec-title"><span>3️⃣</span> Normalization and Clustering</h2>
     <pre>obj &lt;- SCTransform(obj, vars.to.regress="percent.mt")
 obj &lt;- RunPCA(obj)
 obj &lt;- RunUMAP(obj, dims=1:30)
 obj &lt;- FindNeighbors(obj, dims=1:30)
 obj &lt;- FindClusters(obj, resolution=0.5)</pre>
-    <p>下一集将讲解如何用 Harmony 进行多样本整合，以及细胞类型注释的实用技巧。</p>
+    <p>The next episode will cover multi-sample integration with Harmony and practical tips for cell-type annotation.</p>
   </div>
 
-  <p><a href="../tutorials.html">← 返回教程列表</a></p>
+  <p><a href="../tutorials.html">← Back to Tutorials</a></p>
 </div>
 
 <footer>© 2025 Jian Wu · CPI / CIGL · JLU Gießen · MPI-BN</footer>
