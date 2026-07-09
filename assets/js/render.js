@@ -180,3 +180,95 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
 });
+
+// ============================================================
+// Render News Timeline (grouped by year, reverse chronological)
+// ============================================================
+function renderNews(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!data || data.length === 0) {
+    container.innerHTML = `<p class="news-empty">No news items in this category yet.</p>`;
+    return;
+  }
+
+  const badgeMap = {
+    publication: { label: "Publication", cls: "news-badge-pub" },
+    grant:       { label: "Grant",       cls: "news-badge-grant" },
+    award:       { label: "Award",       cls: "news-badge-award" },
+    talk:        { label: "Talk",        cls: "news-badge-talk" },
+    media:       { label: "Media",       cls: "news-badge-media" },
+    team:        { label: "Team",        cls: "news-badge-team" }
+  };
+
+  const years = [...new Set(data.map(item => item.year))];
+
+  let html = "";
+  years.forEach(year => {
+    html += `<div class="news-year-label">${year}</div>`;
+    data.filter(item => item.year === year).forEach(item => {
+      const badge = badgeMap[item.category] || { label: item.category, cls: "news-badge-team" };
+      html += `
+        <div class="news-item">
+          <div class="news-date">${item.date}</div>
+          <div class="news-content">
+            <span class="news-badge ${badge.cls}">${badge.label}</span>
+            <p class="news-title">${item.title}</p>
+            <p class="news-summary">${item.summary}</p>
+            ${item.link ? `<a class="news-link" href="${item.link}" target="${item.link.startsWith('http') ? '_blank' : '_self'}" rel="noopener">${item.linkText || 'Read more →'}</a>` : ''}
+          </div>
+        </div>`;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+// ============================================================
+// Render News Category Filter Tabs (All / Publication / Grant / ...)
+// ============================================================
+function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
+  const tabsContainer = document.getElementById(tabsContainerId);
+  if (!tabsContainer) return;
+
+  const categoryOrder = ["all", "publication", "grant", "award", "talk", "media", "team"];
+  const categoryLabels = {
+    all: "All",
+    publication: "Publication",
+    grant: "Grant",
+    award: "Award",
+    talk: "Talk",
+    media: "Media",
+    team: "Team"
+  };
+
+  // Count items per category
+  const counts = { all: data.length };
+  categoryOrder.slice(1).forEach(cat => {
+    counts[cat] = data.filter(item => item.category === cat).length;
+  });
+
+  let html = "";
+  categoryOrder.forEach(cat => {
+    const activeClass = cat === "all" ? " active" : "";
+    html += `
+      <button class="news-tab${activeClass}" data-category="${cat}">
+        ${categoryLabels[cat]}
+        <span class="news-tab-count">${counts[cat]}</span>
+      </button>`;
+  });
+  tabsContainer.innerHTML = html;
+
+  // Attach filter click handlers
+  const tabs = tabsContainer.querySelectorAll(".news-tab");
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      const selected = tab.dataset.category;
+      const filtered = selected === "all" ? data : data.filter(item => item.category === selected);
+      renderNews(timelineContainerId, filtered);
+    });
+  });
+}
