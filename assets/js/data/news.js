@@ -5,6 +5,16 @@
 // category: 'publication' | 'grant' | 'award' | 'talk' | 'media' | 'team' | 'tool'
 // ============================================================
 const newsData = [
+    {
+    sortDate: "2026-07-17",
+    date: "Jul 17, 2026",
+    category: "tool",
+    title: "jwtools v0.2.0: New Cell-Type Proportion Analysis Toolkit",
+    summary: "Released jwtools v0.2.0, adding ct_proportion_analysis() for donor-level cell-type proportion statistics with pairwisse significance testing and dataset/batch overlay diagnostics, plus rename_dataset_origin() and save_dual() helper functions.",
+    link: "https://github.com/JackNg88/jwtools/releases/tag/v0.2.0",
+    linkText: "View Release Notes →",
+    logo: "assets/img/logos/jwtools-hex.png"
+  },
   {
     sortDate: "2026-07-16",
     date: "July 16, 2026",
