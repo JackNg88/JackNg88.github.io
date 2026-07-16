@@ -679,3 +679,64 @@ body.dark .footer-logo-item:hover {
   .news-item{grid-template-columns:1fr}
   .news-date{padding-top:0;margin-bottom:.2rem}
 }
+
+/* Tool / Release badge */
+.news-badge-tool {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0d9488;
+}
+
+/* Tool / Release badge */
+.news-badge-tool {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0d9488;
+}
+
+/* ============================================================
+   Homepage "Recent Highlights" module (compact news preview)
+============================================================ */
+.highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.highlight-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border, #e5e5e5);
+}
+
+.highlight-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.highlight-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-3, #888);
+  white-space: nowrap;
+}
+
+.highlight-title {
+  font-weight: 600;
+  margin: 0.35rem 0 0.3rem;
+  line-height: 1.4;
+}
+
+.highlight-summary {
+  font-size: 0.9rem;
+  color: var(--text-2, #555);
+  line-height: 1.5;
+  margin: 0 0 0.4rem;
+}
+
+@media (max-width: 480px) {
+  .highlight-item {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}

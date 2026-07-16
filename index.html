@@ -180,6 +180,12 @@
       <p><a href="experience.html">→ Full experience timeline</a></p>
     </div>
 
+    <div class="section" id="highlights">
+      <h2 class="sec-title"><span class="sec-icon">📰</span> Recent Highlights</h2>
+      <div class="highlight-list" id="homeHighlights"></div>
+      <p style="margin-top:1rem"><a href="news.html">View all news →</a></p>
+    </div>
+
     <div class="section" id="featured">
       <h2 class="sec-title"><span class="sec-icon">⭐</span> Featured Publications</h2>
       <div class="pub-list" id="featuredPubs"></div>
@@ -246,11 +252,13 @@
 
 </footer>
 
+<script src="assets/js/data/news.js"></script>
 <script src="assets/js/data/publications.js"></script>
 <script src="assets/js/data/tutorials.js"></script>
 <script src="assets/js/render.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
+  renderNewsHighlights('homeHighlights', newsData, 3);
   renderPublications('featuredPubs', publicationsData, true);
   renderTutorials('latestTutorials', tutorialsData.slice(-2).reverse());
 </script>

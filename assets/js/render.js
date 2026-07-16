@@ -182,7 +182,41 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// Render News Timeline (grouped by year, reverse chronological)
+// News helpers — single source of truth: item.sortDate (YYYY-MM-DD)
+// Year labels and chronological order are ALWAYS derived from
+// sortDate automatically. Never rely on a manually-typed `year`
+// field — this avoids "year label vs. displayed date" mismatches.
+// ============================================================
+
+/* 按 sortDate 降序排序（最新的在前），返回新数组，不修改原数组 */
+function sortByDateDesc(data){
+  return [...data].sort((a, b) => {
+    if (!a.sortDate) return 1;
+    if (!b.sortDate) return -1;
+    return b.sortDate.localeCompare(a.sortDate);
+  });
+}
+
+/* 从 sortDate（YYYY-MM-DD）中提取年份，用于分组标题 */
+function getYearFromItem(item){
+  if (item.sortDate) return item.sortDate.slice(0, 4);
+  if (item.year) return String(item.year); // 兼容旧数据，仍带 year 字段的情况
+  return "Undated";
+}
+
+const NEWS_BADGE_MAP = {
+  publication: { label: "Publication", cls: "news-badge-pub" },
+  grant:       { label: "Grant",       cls: "news-badge-grant" },
+  award:       { label: "Award",       cls: "news-badge-award" },
+  talk:        { label: "Talk",        cls: "news-badge-talk" },
+  media:       { label: "Media",       cls: "news-badge-media" },
+  team:        { label: "Team",        cls: "news-badge-team" },
+  tool:        { label: "Tool / Release", cls: "news-badge-tool" }
+};
+
+// ============================================================
+// Render News Timeline (auto-sorted by sortDate, grouped by
+// year derived from sortDate — reverse chronological)
 // ============================================================
 function renderNews(containerId, data) {
   const container = document.getElementById(containerId);
@@ -193,22 +227,15 @@ function renderNews(containerId, data) {
     return;
   }
 
-  const badgeMap = {
-    publication: { label: "Publication", cls: "news-badge-pub" },
-    grant:       { label: "Grant",       cls: "news-badge-grant" },
-    award:       { label: "Award",       cls: "news-badge-award" },
-    talk:        { label: "Talk",        cls: "news-badge-talk" },
-    media:       { label: "Media",       cls: "news-badge-media" },
-    team:        { label: "Team",        cls: "news-badge-team" }
-  };
-
-  const years = [...new Set(data.map(item => item.year))];
+  // 关键修复：先按真实日期排序，年份分组标题也从同一日期字段推导
+  const sorted = sortByDateDesc(data);
+  const years = [...new Set(sorted.map(item => getYearFromItem(item)))];
 
   let html = "";
   years.forEach(year => {
     html += `<div class="news-year-label">${year}</div>`;
-    data.filter(item => item.year === year).forEach(item => {
-      const badge = badgeMap[item.category] || { label: item.category, cls: "news-badge-team" };
+    sorted.filter(item => getYearFromItem(item) === year).forEach(item => {
+      const badge = NEWS_BADGE_MAP[item.category] || { label: item.category, cls: "news-badge-team" };
       html += `
         <div class="news-item">
           <div class="news-date">${item.date}</div>
@@ -232,7 +259,7 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
   const tabsContainer = document.getElementById(tabsContainerId);
   if (!tabsContainer) return;
 
-  const categoryOrder = ["all", "publication", "grant", "award", "talk", "media", "team"];
+  const categoryOrder = ["all", "publication", "grant", "award", "talk", "media", "team", "tool"];
   const categoryLabels = {
     all: "All",
     publication: "Publication",
@@ -240,7 +267,8 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
     award: "Award",
     talk: "Talk",
     media: "Media",
-    team: "Team"
+    team: "Team",
+    tool: "Tool / Release"
   };
 
   // Count items per category
@@ -268,7 +296,40 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
       tab.classList.add("active");
       const selected = tab.dataset.category;
       const filtered = selected === "all" ? data : data.filter(item => item.category === selected);
-      renderNews(timelineContainerId, filtered);
+      renderNews(timelineContainerId, filtered); // renderNews 内部会自动重新排序
     });
   });
+}
+
+// ============================================================
+// Render Compact News Highlights (for homepage preview module)
+// Auto-sorted by sortDate, shows the latest N items,
+// no year grouping / tabs
+// ============================================================
+function renderNewsHighlights(containerId, data, count = 3) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  if (!data || data.length === 0) {
+    el.innerHTML = `<p class="news-empty">No news items yet.</p>`;
+    return;
+  }
+
+  // 关键修复：预览模块也先排序，再取最新 N 条
+  const sorted = sortByDateDesc(data);
+  const list = sorted.slice(0, count);
+
+  el.innerHTML = list.map(item => {
+    const badge = NEWS_BADGE_MAP[item.category] || { label: item.category, cls: "news-badge-team" };
+    return `
+      <div class="highlight-item">
+        <div class="highlight-date">${item.date}</div>
+        <div class="highlight-content">
+          <span class="news-badge ${badge.cls}">${badge.label}</span>
+          <p class="highlight-title">${item.title}</p>
+          <p class="highlight-summary">${item.summary}</p>
+          ${item.link ? `<a class="news-link" href="${item.link}" target="${item.link.startsWith('http') ? '_blank' : '_self'}" rel="noopener">${item.linkText || 'Read more →'}</a>` : ''}
+        </div>
+      </div>`;
+  }).join('');
 }

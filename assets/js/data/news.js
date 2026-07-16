@@ -1,10 +1,21 @@
 // ============================================================
-// News data — reverse chronological, grouped by year
-// category: 'publication' | 'grant' | 'award' | 'talk' | 'media' | 'team'
+// News data — single source of truth: `sortDate` (YYYY-MM-DD)
+// `date` is only for display formatting; `year` is auto-derived
+// from sortDate by render.js — no need to maintain it manually.
+// category: 'publication' | 'grant' | 'award' | 'talk' | 'media' | 'team' | 'tool'
 // ============================================================
 const newsData = [
   {
-    year: 2026,
+    sortDate: "2026-07-16",
+    date: "July 16, 2026",
+    category: "tool",
+    title: "Introducing jwtools: An R Package for Single-Cell & Omics Utility Functions",
+    summary: "Released jwtools, a personal R package formalizing reusable utility functions from daily single-cell and omics analysis work — starting with qs_save_workspace() and qs_load_workspace() for fast, memory-efficient workspace snapshots via the qs format. A living package, with future additions covering single-cell QC helpers, TE/ERV quantification utilities, and large-matrix data wrangling tools. Licensed under MIT.",
+    link: "https://github.com/JackNg88/jwtools",
+    linkText: "View on GitHub →"
+  },
+  {
+    sortDate: "2026-03-05",
     date: "Mar 5, 2026",
     category: "award",
     title: "Invited to Join the DZL DataLung Training Program (BioTrack)",
@@ -13,7 +24,7 @@ const newsData = [
     linkText: "DZL DataLung School →"
   },
   {
-    year: 2025,
+    sortDate: "2025-07-01",
     date: "Jul 1, 2025",
     category: "team",
     title: "Launched New Academic Website",
@@ -23,7 +34,7 @@ const newsData = [
   },
   /*
   {
-    year: 2025,
+    sortDate: "2025-10-01",
     date: "Oct 2025",
     category: "publication",
     title: "LungERVmap: A Single-Cell Atlas of Endogenous Retrovirus Expression in the Human Lung",
@@ -34,7 +45,7 @@ const newsData = [
   */
   /*
   {
-    year: 2025,
+    sortDate: "2025-08-01",
     date: "Aug 2025",
     category: "talk",
     title: "Invited Talk — ERS International Congress",
@@ -45,7 +56,7 @@ const newsData = [
   */
   /*
   {
-    year: 2025,
+    sortDate: "2025-02-01",
     date: "Feb 2025",
     category: "grant",
     title: "IMPRS-MOB Structured PhD Program — Confirmed Continuation",
@@ -56,7 +67,7 @@ const newsData = [
   */
   /*
   {
-    year: 2024,
+    sortDate: "2024-11-01",
     date: "Nov 2024",
     category: "publication",
     title: "SoloTE-Based Structural Profiling of HERV Loci in Lung eQTL Data",
@@ -67,7 +78,7 @@ const newsData = [
   */
   /*
   {
-    year: 2024,
+    sortDate: "2024-09-01",
     date: "Sep 2024",
     category: "award",
     title: "Travel Award — IMPRS-MOB Annual Retreat",
@@ -78,7 +89,7 @@ const newsData = [
   */
   /*
   {
-    year: 2024,
+    sortDate: "2024-06-01",
     date: "Jun 2024",
     category: "media",
     title: "Featured in CPI Research Highlights",
@@ -89,7 +100,7 @@ const newsData = [
   */
   /*
   {
-    year: 2024,
+    sortDate: "2024-03-01",
     date: "Mar 2024",
     category: "team",
     title: "Launched LungERVmap Project Website",
