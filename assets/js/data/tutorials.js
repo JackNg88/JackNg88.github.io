@@ -1,19 +1,33 @@
+// ⚠️ 本文件由 scripts/build_tutorials.py 自动生成，请勿手动编辑！
+// 如需增删教程，请修改 tutorials-src/ 下的 Markdown 源文件后重新运行构建脚本。
+
 const tutorialsData = [
   {
-    title: "Ep.00 — Podcast Introduction & Roadmap",
-    date: "2024-12-01",
-    summary: "An overview of this podcast/tutorial series: single-cell analysis, and practical survival guides for academic research.",
-    url: "tutorials/ep00-intro.html",
-    type: "podcast",
-    tags: ["Intro"]
+    date: "2025-11-20",
+    title: "Ep.XX — 这里写标题",
+    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
+    url: "tutorials/00-\u5982\u4f55\u4e0a\u4f20_template.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["R", "Seurat", "标签3"]
   },
   {
-    title: "Ep.01 — Building an scRNA-seq Analysis Pipeline from Scratch",
-    date: "2025-01-01",
-    summary: "A complete hands-on walkthrough from FASTQ to Seurat object: CellRanger, quality control, and clustering.",
-    url: "tutorials/ep01-scrna-pipeline.html",
-    type: "podcast",
-    tags: ["scRNA-seq", "R", "Seurat"]
+    date: "2025-11-20",
+    title: "Ep.XX — 这里写标题",
+    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
+    url: "tutorials/_template.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["R", "Seurat", "标签3"]
+  },
+  {
+    date: "2025-11-20",
+    title: "Ep.XX — 这里写标题",
+    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
+    url: "tutorials/test4.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["R", "Seurat", "标签3"]
   },
   {
     date: "2025-11-13",
@@ -23,5 +37,5 @@ const tutorialsData = [
     cover: "",
     type: "tutorial",
     tags: ["Test"]
-  },
+  }
 ];

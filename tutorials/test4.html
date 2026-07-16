@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ep.99 — Pipeline Test | Jian Wu — Lung Cell Atlas Research</title>
-<meta name="description" content="This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.">
+<title>Ep.XX — 这里写标题 | Jian Wu — Lung Cell Atlas Research</title>
+<meta name="description" content="这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="../assets/img/logos/Jian_Wu_icon-only.png">
@@ -51,19 +51,51 @@
 
 <div class="full-wrap">
   <div class="page-header">
-    <h1>Ep.99 — Pipeline Test</h1>
-    <p class="tut-page-date">2025-11-13</p>
+    <h1>Ep.XX — 这里写标题</h1>
+    <p class="tut-page-date">2025-11-20</p>
     <div class="tags tut-page-tags">
-      <span class="tag">Test</span>
+      <span class="tag">R</span><span class="tag">Seurat</span><span class="tag">标签3</span>
     </div>
   </div>
 
   <div class="section tut-article-body">
-    <h2 id="test-section">Test Section</h2>
-<p>This is a <strong>test paragraph</strong> to confirm Markdown rendering works.</p>
-<p>```r
-x &lt;- 1 + 1
-print(x)</p>
+    <h2 id="_1">小节标题</h2>
+<p>这里开始写正文内容，支持标准 Markdown 语法。</p>
+<h3 id="_2">代码块示例</h3>
+<pre class="codehilite"><code class="language-r">library(Seurat)
+obj &lt;- CreateSeuratObject(counts = mat)
+obj &lt;- NormalizeData(obj)
+</code></pre>
+
+<h3 id="_3">图片示例</h3>
+<p>如果需要插入图片，先把图片放到 <code>assets/img/tutorials/</code> 目录下，然后这样引用：</p>
+<p><img alt="描述文字" src="../assets/img/tutorials/your-image.png" /></p>
+<h3 id="_4">表格示例</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min.cutoff</code></td>
+<td>设置颜色映射下限</td>
+</tr>
+<tr>
+<td><code>max.cutoff</code></td>
+<td>设置颜色映射上限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">列表示例</h3>
+<ul>
+<li>第一点</li>
+<li>第二点</li>
+<li>子要点</li>
+</ul>
+<p>正文可以随意写多个二级/三级标题、代码块、图片、表格、加粗 <strong>重点内容</strong>、行内代码 <code>like_this()</code>，Markdown 语法都会被正确渲染成 HTML。</p>
   </div>
 
   <p style="margin-top:2rem"><a href="../tutorials.html">← Back to all tutorials</a></p>
