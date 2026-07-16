@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>导出AI已存储的记忆 | Jian Wu — Lung Cell Atlas Research</title>
-<meta name="description" content="导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。">
+<title>将记忆导入Gemini | Jian Wu — Lung Cell Atlas Research</title>
+<meta name="description" content="从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="../assets/img/logos/Jian_Wu_icon-only.png">
@@ -51,7 +51,7 @@
 
 <div class="full-wrap">
   <div class="page-header">
-    <h1>导出AI已存储的记忆</h1>
+    <h1>将记忆导入Gemini</h1>
     <p class="tut-page-date">2026-07-16</p>
     <div class="tags tut-page-tags">
       <span class="tag">AI</span><span class="tag">记忆管理</span><span class="tag">工具</span>
@@ -59,62 +59,22 @@
   </div>
 
   <div class="section tut-article-body">
-    <p>Export all of my stored memories and any context you've learned about me from past conversations. Preserve my words verbatim where possible, especially for instructions and preferences.</p>
-<h2 id="categories-output-in-this-order">Categories (output in this order):</h2>
-<ol>
-<li>
-<p><strong>Instructions</strong>: Rules I've explicitly asked you to follow going forward — tone, format, style, "always do X", "never do Y", and corrections to your behavior. Only include rules from stored memories, not from conversations.</p>
-</li>
-<li>
-<p><strong>Identity</strong>: Name, age, location, education, family, relationships, languages, and personal interests.</p>
-</li>
-<li>
-<p><strong>Career</strong>: Current and past roles, companies, and general skill areas.</p>
-</li>
-<li>
-<p><strong>Projects</strong>: Projects I meaningfully built or committed to. Ideally ONE entry per project. Include what it does, current status, and any key decisions. Use the project name or a short descriptor as the first words of the entry.</p>
-</li>
-<li>
-<p><strong>Preferences</strong>: Opinions, tastes, and working-style preferences that apply broadly.</p>
-</li>
-</ol>
-<h2 id="format">Format:</h2>
-<p>Use section headers for each category. Within each category, list one entry per line, sorted by oldest date first. Format each line as:</p>
-<p>[YYYY-MM-DD] - Entry content here.</p>
-<p>If no date is known, use [unknown] instead.</p>
-<h2 id="output">Output:</h2>
-<ul>
-<li>Wrap the entire export in a single code block for easy copying.</li>
-<li>After the code block, state whether this is the complete set or if more remain.</li>
-</ul>
-<p>请导出我所有已存储的记忆，以及你从过往对话中了解到的关于我的任何背景信息。请尽可能逐字保留我的原话，特别是针对指令和偏好的内容。</p>
-<h2 id="_1">类别（按此顺序输出）：</h2>
-<ol>
-<li>
-<p><strong>指令</strong>：我明确要求你今后遵循的规则——包括语气、格式、风格、“总是做 X”、“从不做 Y”以及对你行为的修正。仅包含来自已存储记忆中的规则，不包含来自对话中的规则。</p>
-</li>
-<li>
-<p><strong>身份信息</strong>：姓名、年龄、所在地、教育背景、家庭、人际关系、语言能力及个人兴趣。</p>
-</li>
-<li>
-<p><strong>职业经历</strong>：当前及过往职位、任职公司以及主要技能领域。</p>
-</li>
-<li>
-<p><strong>项目</strong>：我实质性构建或投入参与的项目。理想情况下，每个项目仅列为一项。内容应包含项目功能、当前状态及关键决策。请以项目名称或简短描述作为条目的开头。</p>
-</li>
-<li>
-<p><strong>偏好</strong>：适用于广泛场景的观点、品味及工作风格偏好。</p>
-</li>
-</ol>
-<h2 id="_2">格式：</h2>
-<p>为每个类别使用标题。在每个类别内，每行列出一个条目，并按日期从早到晚排序。每行格式如下：</p>
-<p>[YYYY-MM-DD] - 条目内容。</p>
-<p>若日期未知，请使用 [unknown] 代替。</p>
-<h2 id="_3">输出要求：</h2>
-<ul>
-<li>将整个导出内容包含在一个代码块中，以便于复制。</li>
-<li>在代码块之后，说明这是完整内容还是仍有剩余内容。</li>
-</ul>
+    <p>帮我把一个 AI 助理中的上下文导入到另一个 AI 助理。你的任务是回顾我们过往的对话，总结你对我的了解。</p>
+<p>在输出中，请避免使用第一人称代词（我、我的）和第二人称代词（你、你的）。请改用“用户”或使用中性词语来指代你从过往对话了解到的人。</p>
+<p>尽可能保留用户的原话，尤其是指令和偏好方面的内容。</p>
+<p>类别（按此顺序输出）：
+1. 人口统计信息：常用名字、职业、教育程度和常住地。
+2. 兴趣和偏好：持续积极的投入（不只是拥有某个物品或单次购买）。
+3. 关系：已确认的长期关系。
+4. 标注日期的事件、项目和计划：近期重要活动的记录。
+5. 指令：我明确要求你今后遵循的规则，包括“必须做到的事项”“绝对禁止的事项”以及行为纠正。仅包含存储的记忆中的规则，不包含对话中的规则。</p>
+<p>格式：
+将内容按照上述类别分段，并标出对应类别。尽量引用我在提示中输入过的原话，以此作为每个条目的证据。按照以下格式构建每个条目：
+* 用户的名字是<name>。
+    * 证据：用户说“叫我<name>”。日期：[YYYY-MM-DD]。</p>
+<p>输出：
+- 仅输出要求提供的信息。不得包含任何对话填充语、介绍性文字或结束语。</p>
+<p>最后补全句子“导入来源：<name>”，其中 name 应替换为 ChatGPT、Claude、Grok 等。回答必须以这句话结束。</p>
   </div>
 
   <p style="margin-top:2rem"><a href="../tutorials.html">← Back to all tutorials</a></p>

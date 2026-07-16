@@ -5,15 +5,24 @@ const tutorialsData = [
   {
     date: "2026-07-16",
     title: "导出AI已存储的记忆",
-    summary: "请导出我所有已存储的记忆，以及你从过往对话中了解到的关于我的任何背景信息。请尽可能逐字保留我的原话，特别是针对指令和偏好的内容。",
+    summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
     url: "tutorials/10_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6-20260716.html",
     cover: "",
     type: "tutorial",
-    tags: ["R", "Seurat", "标签3"]
+    tags: ["AI", "记忆管理", "工具"]
   },
   {
     date: "2026-07-16",
-    title: "00-如何上传_template",
+    title: "将记忆导入Gemini",
+    summary: "从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。",
+    url: "tutorials/30_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["AI", "记忆管理", "工具"]
+  },
+  {
+    date: "2026-07-16",
+    title: "如何上传_template",
     summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
     url: "tutorials/ep00-how-to-upload.html",
     cover: "",
