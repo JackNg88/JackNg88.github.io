@@ -109,7 +109,7 @@
 <script src="assets/js/render.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
-  renderTutorials('tutGrid', [...tutorialsData].reverse());
+  // 完整列表页：按年份分组展示全部教程
+  // 不传 limit，展示 tutorials.js 里的全部条目
+  renderTutorials('tutGrid', tutorialsData, { groupByYear: true });
 </script>
-</body>
-</html>

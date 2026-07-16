@@ -73,11 +73,36 @@ function renderExpertise(containerId, data){
   `).join('');
 }
 
-/* 5. Tutorials / Podcast */
-function renderTutorials(containerId, data){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  el.innerHTML = data.map(t => `
+/* ============================================================
+   5. Tutorials / Podcast
+   ------------------------------------------------------------
+   设计说明：
+   - renderTutorials() 内部永远自己做一次"按 date 降序排序"，
+     不信任调用方传入数组的原始顺序。
+     （历史 bug：之前调用方各自用 .reverse() / .slice(-2).reverse()
+      去"猜"数据顺序，猜错了导致首页和列表页顺序相反、且首页展示的
+      是最旧的两篇。现在把排序责任收归到渲染函数内部，调用方只需要
+      声明"要不要分组"和"要不要限制数量"这两个展示层意图。）
+   - options.groupByYear: 是否按年份插入分组标题（用于 tutorials.html
+     的完整列表页，类似 News 页面的年份分组，但不引入分类筛选）。
+   - options.limit: 只取最新 N 条（用于首页 "Latest Tutorials" 预览）。
+     limit 在排序 *之后* 应用，保证拿到的一定是"最新的 N 条"，
+     而不是数组物理位置上的最后 N 条。
+============================================================ */
+
+/* 从 'YYYY-MM-DD' 形式的日期字符串中提取年份；
+   容错处理空值/异常格式，避免生成 "Undefined" 分组标题 */
+function getYearFromDate(dateStr){
+  if(!dateStr || typeof dateStr !== 'string' || dateStr.length < 4){
+    return "Undated";
+  }
+  return dateStr.slice(0, 4);
+}
+
+/* 生成单个教程卡片的 HTML，抽成独立小函数，
+   避免 groupByYear 分支和非分组分支各写一遍卡片模板导致重复维护 */
+function tutorialCardHTML(t){
+  return `
     <a class="tut-card" href="${t.url}">
       <div class="tut-cover">
         ${t.cover ? `<img src="${t.cover}" alt="${t.title}">` : (t.type === 'podcast' ? '🎙️' : '📝')}
@@ -91,7 +116,44 @@ function renderTutorials(containerId, data){
         </div>
       </div>
     </a>
-  `).join('');
+  `;
+}
+
+function renderTutorials(containerId, data, options = {}){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const { groupByYear = false, limit = null } = options;
+
+  // 关键修复点：排序永远在函数内部完成，调用方不需要也不应该自己 reverse/slice
+  let sorted = sortByDateDesc(data, 'date');
+
+  // limit 在排序之后应用 —— 保证 "最新 N 条" 是按真实日期算出来的，
+  // 而不是数组物理顺序的头 N 条或尾 N 条
+  if (limit !== null){
+    sorted = sorted.slice(0, limit);
+  }
+
+  if (!groupByYear){
+    // 首页 "Latest Tutorials" 走这个分支：扁平网格，不需要年份标题
+    el.innerHTML = sorted.map(t => tutorialCardHTML(t)).join('');
+    return;
+  }
+
+  // tutorials.html 完整列表页走这个分支：按年份插入分组标题
+  // 注意：.tut-year-label 需要在 CSS 里设置 grid-column: 1 / -1，
+  // 否则它会被当成 grid 里的一个普通格子，而不是跨行标题
+  const years = [...new Set(sorted.map(t => getYearFromDate(t.date)))];
+
+  let html = "";
+  years.forEach(year => {
+    html += `<div class="tut-year-label">${year}</div>`;
+    sorted
+      .filter(t => getYearFromDate(t.date) === year)
+      .forEach(t => { html += tutorialCardHTML(t); });
+  });
+
+  el.innerHTML = html;
 }
 
 /* ============================================================
@@ -123,7 +185,6 @@ function renderGallery(containerId, data, filters = {type:'all', source:'all'}){
     list = list.filter(g => g.source === filters.source);
   }
 
-  /* 空结果提示 */
   if(list.length === 0){
     el.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--text-3);padding:2rem 0">
       没有符合条件的内容 · No items match this filter
@@ -142,7 +203,6 @@ function renderGallery(containerId, data, filters = {type:'all', source:'all'}){
     </div>
   `).join('');
 
-  /* 存一份当前渲染列表供 lightbox 点击使用 */
   window.__currentGalleryList = list;
 }
 
@@ -188,19 +248,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // field — this avoids "year label vs. displayed date" mismatches.
 // ============================================================
 
-/* 按 sortDate 降序排序（最新的在前），返回新数组，不修改原数组 */
-function sortByDateDesc(data){
+/* 通用日期降序排序：优先使用调用方指定的 field，
+   其次回退 sortDate，再回退 date（兼容 News 和 Tutorials 两套数据结构）*/
+function sortByDateDesc(data, field){
   return [...data].sort((a, b) => {
-    if (!a.sortDate) return 1;
-    if (!b.sortDate) return -1;
-    return b.sortDate.localeCompare(a.sortDate);
+    const da = (field && a[field]) || a.sortDate || a.date;
+    const db = (field && b[field]) || b.sortDate || b.date;
+    if (!da) return 1;
+    if (!db) return -1;
+    return String(db).localeCompare(String(da));
   });
 }
 
-/* 从 sortDate（YYYY-MM-DD）中提取年份，用于分组标题 */
+/* 从 sortDate（YYYY-MM-DD）中提取年份，用于 News 分组标题
+   （Tutorials 用的是上面新增的 getYearFromDate，字段名不同，故分开写，
+    避免为了共用一个函数而引入 "field 名称到底是 date 还是 sortDate" 的隐藏耦合）*/
 function getYearFromItem(item){
   if (item.sortDate) return item.sortDate.slice(0, 4);
-  if (item.year) return String(item.year); // 兼容旧数据，仍带 year 字段的情况
+  if (item.year) return String(item.year);
   return "Undated";
 }
 
@@ -227,7 +292,6 @@ function renderNews(containerId, data) {
     return;
   }
 
-  // 关键修复：先按真实日期排序，年份分组标题也从同一日期字段推导
   const sorted = sortByDateDesc(data);
   const years = [...new Set(sorted.map(item => getYearFromItem(item)))];
 
@@ -271,7 +335,6 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
     tool: "Tool / Release"
   };
 
-  // Count items per category
   const counts = { all: data.length };
   categoryOrder.slice(1).forEach(cat => {
     counts[cat] = data.filter(item => item.category === cat).length;
@@ -288,7 +351,6 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
   });
   tabsContainer.innerHTML = html;
 
-  // Attach filter click handlers
   const tabs = tabsContainer.querySelectorAll(".news-tab");
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
@@ -296,15 +358,13 @@ function renderNewsTabs(tabsContainerId, timelineContainerId, data) {
       tab.classList.add("active");
       const selected = tab.dataset.category;
       const filtered = selected === "all" ? data : data.filter(item => item.category === selected);
-      renderNews(timelineContainerId, filtered); // renderNews 内部会自动重新排序
+      renderNews(timelineContainerId, filtered);
     });
   });
 }
 
 // ============================================================
 // Render Compact News Highlights (for homepage preview module)
-// Auto-sorted by sortDate, shows the latest N items,
-// no year grouping / tabs
 // ============================================================
 function renderNewsHighlights(containerId, data, count = 3) {
   const el = document.getElementById(containerId);
@@ -315,7 +375,6 @@ function renderNewsHighlights(containerId, data, count = 3) {
     return;
   }
 
-  // 关键修复：预览模块也先排序，再取最新 N 条
   const sorted = sortByDateDesc(data);
   const list = sorted.slice(0, count);
 

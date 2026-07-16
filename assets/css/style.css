@@ -201,6 +201,22 @@ body.dark .sec-title{color:var(--copper-light)}
 .tut-summary{font-size:.8rem;color:var(--text-2);flex:1}
 .tut-tags{margin-top:.6rem}
 
+/* Tutorials 年份分组标题（仅在 tutorials.html 完整列表页使用，
+   由 render.js 的 renderTutorials(..., { groupByYear:true }) 插入）
+   —— grid-column:1/-1 让它跨越 .tut-grid 的整行，而不是被当成一张卡片 */
+.tut-year-label{
+  grid-column:1 / -1;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;
+  font-weight:600;
+  color:var(--green-dark);
+  border-bottom:2px solid var(--copper);
+  padding:1.4rem 0 .5rem;
+  margin:0;
+}
+.tut-year-label:first-child{padding-top:0}
+body.dark .tut-year-label{color:var(--copper-light)}
+
 /* ─── Gallery ─── */
 .gal-tabs-row{display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap;align-items:center}
 .gal-tabs-row:last-of-type{margin-bottom:1.25rem}

@@ -260,7 +260,8 @@
 <script>
   renderNewsHighlights('homeHighlights', newsData, 3);
   renderPublications('featuredPubs', publicationsData, true);
-  renderTutorials('latestTutorials', tutorialsData.slice(-2).reverse());
+
+  // 首页预览：只显示最新 2 篇，不分组
+  // limit 在函数内部排序之后应用，保证一定是日期最新的 2 篇
+  renderTutorials('latestTutorials', tutorialsData, { limit: 2 });
 </script>
-</body>
-</html>
