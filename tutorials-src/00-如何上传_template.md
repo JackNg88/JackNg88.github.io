@@ -11,13 +11,7 @@ cover: ""
 
 这里开始写正文内容，支持标准 Markdown 语法。
 
-### 代码块示例
-
-```r
-library(Seurat)
-obj <- CreateSeuratObject(counts = mat)
-obj <- NormalizeData(obj)
-
+---
 
 好的，我仔细核对了你贴的 `tutorial_template.html` 和 Ep.99 的 front matter 格式——**完全匹配我之前脚本里的假设，一个字段都不用改**：
 
