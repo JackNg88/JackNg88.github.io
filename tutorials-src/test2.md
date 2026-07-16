@@ -39,5 +39,4 @@ obj <- NormalizeData(obj)
   - 子要点
 
 正文可以随意写多个二级/三级标题、代码块、图片、表格、加粗 **重点内容**、行内代码 `like_this()`，Markdown 语法都会被正确渲染成 HTML。
-```
 
