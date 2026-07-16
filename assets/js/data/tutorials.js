@@ -14,7 +14,7 @@ const tutorialsData = [
     url: "tutorials/ep01-scrna-pipeline.html",
     type: "podcast",
     tags: ["scRNA-seq", "R", "Seurat"]
-  }
+  },
   {
     date: "2025-11-13",
     title: "Ep.99 — Pipeline Test",
