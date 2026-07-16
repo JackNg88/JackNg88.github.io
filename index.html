@@ -120,8 +120,19 @@
       </div>
       <div class="profile-body">
         <div class="social-grid">
-          <a href="mailto:Jian.Wu@innere.med.uni-giessen.de" class="soc-btn"><span>✉️ JLU Email</span></a>
-          <a href="mailto:Jian.Wu@mpi-bn.mpg.de" class="soc-btn"><span>✉️ MPI Email</span></a>
+          <!-- ── 合并 JLU Email + MPI Email → 单个 "Email" 按钮 ──
+               保留 MPI 邮箱地址（更稳定，不随学籍状态失效），
+               标签用中性词 "Email"，不强调具体是哪个机构邮箱 -->
+          <a href="mailto:Jian.Wu@mpi-bn.mpg.de" class="soc-btn"><span>✉️ Email</span></a>
+
+          <!-- ── 新增：jwtools 按钮，填补合并邮箱后空出的位置 ──
+               用真实 hex logo 缩小作为图标（而非 emoji），
+               和其余纯 emoji 按钮形成差异化，强调这是自有项目 -->
+          <a href="https://github.com/JackNg88/jwtools" class="soc-btn" target="_blank">
+            <img src="assets/img/logos/jwtools-hex.png" alt="jwtools" class="soc-icon-img">
+            <span>jwtools</span>
+          </a>
+
           <a href="https://github.com/JackNg88" class="soc-btn" target="_blank"><span>💻 GitHub</span></a>
           <a href="https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl" class="soc-btn" target="_blank"><span>🎓 Scholar</span></a>
           <a href="https://www.linkedin.com/in/jackng833/" class="soc-btn" target="_blank"><span>💼 LinkedIn</span></a>
@@ -265,3 +276,5 @@
   // limit 在函数内部排序之后应用，保证一定是日期最新的 2 篇
   renderTutorials('latestTutorials', tutorialsData, { limit: 2 });
 </script>
+</body>
+</html>

@@ -756,3 +756,13 @@ body.dark .footer-logo-item:hover {
     gap: 0.3rem;
   }
 }
+
+/* jwtools 按钮里的小图标（区别于其他 7 个按钮的纯 emoji 风格）
+   —— 尺寸对齐 .soc-btn 现有的 .72rem 字号行高，
+      不需要改动 .soc-btn 本身的 flex 布局，img 和 span 天然并排 */
+.soc-icon-img{
+  height:14px;
+  width:auto;
+  border-radius:2px;
+  flex-shrink:0;
+}
