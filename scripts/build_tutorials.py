@@ -170,6 +170,7 @@ def build_all_tutorials() -> list[dict]:
     """
     遍历 tutorials-src/*.md：
       - 解析 front matter
+      - 跳过以下划线 "_" 开头的文件（约定作为模板/草稿，不参与发布）
       - 跳过 draft: true 的草稿
       - 渲染正文 HTML 并写入 tutorials/{slug}.html
       - 收集每篇的 metadata（附带 slug、url）用于后续重建 tutorials.js
@@ -183,6 +184,16 @@ def build_all_tutorials() -> list[dict]:
     TUTORIALS_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     md_files = sorted(TUTORIALS_SRC_DIR.glob("*.md"))
+
+    # >>> 新增：跳过以下划线开头的文件（约定作为模板/草稿，不参与发布）
+    # 例如 tutorials-src/_template.md 会被永久保留在源码目录里当模板，
+    # 但既不会生成 tutorials/_template.html，也不会被写入 tutorials.js
+    skipped_template_files = [f for f in md_files if f.stem.startswith("_")]
+    md_files = [f for f in md_files if not f.stem.startswith("_")]
+    for f in skipped_template_files:
+        print(f"[skip] '{f.name}' 以下划线开头，视为模板文件，跳过发布。")
+    # <<< 新增结束
+
     if not md_files:
         print(f"[warn] '{TUTORIALS_SRC_DIR}' 下没有找到任何 .md 文件，跳过构建。")
         return []
