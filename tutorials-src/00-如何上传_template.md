@@ -1,5 +1,5 @@
 ---
-title: "Ep.XX — 这里写标题"
+title: "00-如何上传_template"
 date: 2025-11-20
 summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。"
 type: tutorial
