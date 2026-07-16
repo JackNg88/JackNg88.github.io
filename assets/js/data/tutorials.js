@@ -30,6 +30,15 @@ const tutorialsData = [
     tags: ["R", "Seurat", "标签3"]
   },
   {
+    date: "2025-11-20",
+    title: "test5",
+    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
+    url: "tutorials/test5.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["R", "Seurat", "标签3"]
+  },
+  {
     date: "2025-11-13",
     title: "Ep.99 — Pipeline Test",
     summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.",
