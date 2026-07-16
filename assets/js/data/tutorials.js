@@ -15,4 +15,13 @@ const tutorialsData = [
     type: "podcast",
     tags: ["scRNA-seq", "R", "Seurat"]
   }
+  {
+    date: "2025-11-13",
+    title: "Ep.99 — Pipeline Test",
+    summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.",
+    url: "tutorials/ep02-trajectory-analysis.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["Test"]
+  },
 ];
