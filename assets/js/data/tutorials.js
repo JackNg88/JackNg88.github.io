@@ -6,10 +6,19 @@ const tutorialsData = [
     date: "2026-07-16",
     title: "导出AI已存储的记忆",
     summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
-    url: "tutorials/10_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6-20260716.html",
+    url: "tutorials/10_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
     cover: "",
     type: "tutorial",
     tags: ["AI", "记忆管理", "工具"]
+  },
+  {
+    date: "2026-07-16",
+    title: "如何查看jwtools包里有哪些可用函数",
+    summary: "介绍 6 种在 R 中查找已安装包导出函数的方法，从 ls() 到 NAMESPACE 源码核查，并以自建包 jwtools 为例演示。",
+    url: "tutorials/1_\u67e5\u770bjwtools\u6709\u54ea\u4e9b\u51fd\u6570.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["R", "Seurat", "jwtools", "R包开发"]
   },
   {
     date: "2026-07-16",
