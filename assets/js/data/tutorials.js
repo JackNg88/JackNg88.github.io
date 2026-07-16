@@ -22,27 +22,27 @@ const tutorialsData = [
   },
   {
     date: "2026-07-16",
-    title: "如何上传_template",
+    title: "如何上传模版文件",
     summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
-    url: "tutorials/ep00-how-to-upload.html",
+    url: "tutorials/\u5982\u4f55\u4e0a\u4f20\u6a21\u7248\u6587\u4ef6.html",
     cover: "",
     type: "tutorial",
     tags: ["R", "Seurat", "标签3"]
   },
   {
     date: "2025-11-20",
-    title: "test4",
-    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
-    url: "tutorials/test6.html",
+    title: "模版",
+    summary: "模版: 这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
+    url: "tutorials/\u6a21\u7248.html",
     cover: "",
     type: "tutorial",
     tags: ["R", "Seurat", "标签3"]
   },
   {
     date: "2025-11-13",
-    title: "Ep.99 — Pipeline Test",
+    title: "Markdown-to-HTML build pipelines模版",
     summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.",
-    url: "tutorials/ep02-trajectory-analysis.html",
+    url: "tutorials/Markdown-to-HTML build pipelines\u6a21\u7248.html",
     cover: "",
     type: "tutorial",
     tags: ["Test"]
