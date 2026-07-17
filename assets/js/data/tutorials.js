@@ -27,7 +27,7 @@ const tutorialsData = [
     url: "tutorials/10_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
     cover: "",
     type: "tutorial",
-    tags: ["AI", "记忆管理", "工具"]
+    tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
   {
     date: "2026-07-16",
@@ -45,7 +45,7 @@ const tutorialsData = [
     url: "tutorials/30_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
     cover: "",
     type: "tutorial",
-    tags: ["AI", "记忆管理", "工具"]
+    tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
   {
     date: "2026-07-16",
