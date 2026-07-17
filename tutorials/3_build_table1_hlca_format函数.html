@@ -63,7 +63,7 @@
 <p>把这段脚本重构为 <code>jwtools</code> 包里的一个标准函数，遵循 R 包开发规范：</p>
 <ol>
 <li><strong>函数名</strong>：<code>build_table1_hlca_format()</code> —— 动词开头，符合 tidyverse 风格</li>
-<li><strong>参数化</strong>：原脚本里硬编码的白名单列、<code>sample</code>名解析正则、输出路径等全部变成可配置参数，保持默认值与你当前项目一致，但其他项目（HeartERVmap/PH-ERVAtlas等）也能复用</li>
+<li><strong>参数化</strong>：原脚本里硬编码的白名单列、<code>sample</code>名解析正则、输出路径等全部变成可配置参数，保持默认值与你当前项目一致，但其他项目也能复用</li>
 <li><strong>不强制写文件</strong>：默认只返回结果列表（in-memory），<code>save_output=TRUE</code>时才写盘，符合包函数"纯函数优先"的设计原则</li>
 <li><strong>显式命名空间</strong>：包内函数用 <code>pkg::fun()</code> 写法，避免 <code>library()</code> 依赖冲突（这是CRAN/R包开发的硬性要求）</li>
 <li><strong>roxygen2 文档</strong>：可以直接 <code>devtools::document()</code> 生成帮助文档</li>
