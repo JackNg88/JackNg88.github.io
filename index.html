@@ -120,15 +120,11 @@
       </div>
       <div class="profile-body">
         <div class="social-grid">
-          <!-- ── jwtools 放左边第一个：突出自有工具项目，用真实 hex logo 缩小作为图标 ── -->
           <a href="https://github.com/JackNg88/jwtools" class="soc-btn" target="_blank">
             <img src="assets/img/logos/jwtools-hex.png" alt="jwtools" class="soc-icon-img">
             <span>jwtools</span>
           </a>
 
-          <!-- ── Email 放右边：合并 JLU Email + MPI Email → 单个按钮
-               保留 MPI 邮箱地址（更稳定，不随学籍状态失效），
-               标签用中性词 "Email"，不强调具体是哪个机构邮箱 ── -->
           <a href="mailto:Jian.Wu@mpi-bn.mpg.de" class="soc-btn"><span>✉️ Email</span></a>
 
           <a href="https://github.com/JackNg88" class="soc-btn" target="_blank"><span>💻 GitHub</span></a>
@@ -137,7 +133,6 @@
           <a href="https://x.com/jackng831" class="soc-btn" target="_blank"><span>𝕏 X (Twitter)</span></a>
           <a href="https://orcid.org/0000-0003-4720-2374" class="soc-btn" target="_blank"><span>🪪 ORCID</span></a>
 
-          <!-- ── 恢复为简洁的 "Pullamsetti Lab"，避免按钮内文字换行溢出 ── -->
           <a href="https://www.spullamsettilab.com/index.php" class="soc-btn" target="_blank"><span>🌐 Pullamsetti Lab</span></a>
         </div>
       </div>
@@ -271,10 +266,12 @@
 <script>
   renderNewsHighlights('homeHighlights', newsData, 3);
   renderPublications('featuredPubs', publicationsData, true);
-
-  // 首页预览：只显示最新 2 篇，不分组
-  // limit 在函数内部排序之后应用，保证一定是日期最新的 2 篇
   renderTutorials('latestTutorials', tutorialsData, { limit: 2 });
 </script>
+
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ccb5353e9ca04cfcaab486784d4870ff"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
