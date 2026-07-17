@@ -3,7 +3,7 @@ title: "将记忆导入Gemini"
 date: 2026-07-16
 summary: "从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。"
 type: tutorial
-tags: ["AI", "记忆管理", "工具"]
+tags: ['Jian Wu',"AI", "记忆管理", "工具"]
 cover: ""
 ---
 
