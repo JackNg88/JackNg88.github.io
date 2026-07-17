@@ -3,6 +3,24 @@
 
 const tutorialsData = [
   {
+    date: "2026-07-17",
+    title: "如何把新函数整合成jwtools函数",
+    summary: "记录如何将新写的 R 函数按 roxygen2 + testthat 规范整合进 jwtools 包，含依赖声明、文档生成与测试流程。",
+    url: "tutorials/2_\u5982\u4f55\u628a\u65b0\u51fd\u6570\u6574\u5408\u6210jwtools\u51fd\u6570.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["Jian Wu", "R", "Seurat", "jwtools"]
+  },
+  {
+    date: "2026-07-17",
+    title: "build_table1_hlca_format函数",
+    summary: "将 LungAgingERV 中构建 Table 1（HLCA 格式）的脚本重构为 jwtools 包函数 build_table1_hlca_format()，支持可配置白名单、可插拔 subject_ID 解析器，跨项目复用。",
+    url: "tutorials/3_build_table1_hlca_format\u51fd\u6570.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["Jian Wu", "R", "Seurat", "jwtools"]
+  },
+  {
     date: "2026-07-16",
     title: "导出AI已存储的记忆",
     summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
@@ -18,7 +36,7 @@ const tutorialsData = [
     url: "tutorials/1_\u67e5\u770bjwtools\u6709\u54ea\u4e9b\u51fd\u6570.html",
     cover: "",
     type: "tutorial",
-    tags: ["R", "Seurat", "jwtools", "R包开发"]
+    tags: ["Jian Wu", "R", "jwtools", "R包开发"]
   },
   {
     date: "2026-07-16",
