@@ -114,8 +114,26 @@
 <script>
   renderConferences('confList', conferencesData);
 </script>
-<!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ccb5353e9ca04cfcaab486784d4870ff"}'></script>
+<!-- ══════════════════════════════════════════
+     Cloudflare Web Analytics (Self-Exclusion Enabled)
+     ══════════════════════════════════════════ -->
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('notrack') === '1') {
+    localStorage.setItem('cf_notrack', '1');
+    console.log('[Analytics] Self-visit tracking disabled for this browser.');
+  }
+
+  if (localStorage.getItem('cf_notrack') !== '1') {
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    s.setAttribute('data-cf-beacon', '{"token": "ccb5353e9ca04cfcaab486784d4870ff"}');
+    document.body.appendChild(s);
+  }
+})();
+</script>
 <!-- End Cloudflare Web Analytics -->
 </body>
 </html>

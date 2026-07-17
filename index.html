@@ -269,8 +269,34 @@
   renderTutorials('latestTutorials', tutorialsData, { limit: 2 });
 </script>
 
-<!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ccb5353e9ca04cfcaab486784d4870ff"}'></script>
+<!-- ══════════════════════════════════════════
+     Cloudflare Web Analytics (Self-Exclusion Enabled)
+     
+     使用方法：
+     1. 首次在自己的浏览器/设备上，访问一次带参数的链接：
+        https://jackng88.github.io/?notrack=1
+        （任意页面加 ?notrack=1 都可以触发，访问一次即可）
+     2. 之后该浏览器将永久跳过 Beacon 加载，不再计入访客统计
+     3. 如果清除了浏览器缓存/localStorage，需要重新访问一次上述链接
+     4. 每台设备（手机/工作电脑/家里电脑）需要单独激活一次
+     ══════════════════════════════════════════ -->
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('notrack') === '1') {
+    localStorage.setItem('cf_notrack', '1');
+    console.log('[Analytics] Self-visit tracking disabled for this browser.');
+  }
+
+  if (localStorage.getItem('cf_notrack') !== '1') {
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    s.setAttribute('data-cf-beacon', '{"token": "ccb5353e9ca04cfcaab486784d4870ff"}');
+    document.body.appendChild(s);
+  }
+})();
+</script>
 <!-- End Cloudflare Web Analytics -->
 
 </body>
