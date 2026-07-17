@@ -3,7 +3,7 @@ title: "如何查看jwtools包里有哪些可用函数"
 date: 2026-07-16
 summary: "介绍 6 种在 R 中查找已安装包导出函数的方法，从 ls() 到 NAMESPACE 源码核查，并以自建包 jwtools 为例演示。"
 type: tutorial
-tags: ["R", "Seurat", "jwtools", 'R包开发']
+tags: ["Jian Wu", "R", "jwtools", 'R包开发']
 cover: ""
 ---
 
