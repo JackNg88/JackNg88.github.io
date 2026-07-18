@@ -7,7 +7,7 @@ const tutorialsData = [
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
     summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
     url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93.html",
-    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo2.png",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "jwtools", "AI提示词", "科研效率", "代码调试"]
   },
@@ -43,7 +43,7 @@ const tutorialsData = [
     title: "导出AI已存储的记忆",
     summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
     url: "tutorials/50_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
-    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo2.png",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
@@ -52,7 +52,7 @@ const tutorialsData = [
     title: "将记忆导入Gemini",
     summary: "从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。",
     url: "tutorials/51_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
-    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo2.png",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
