@@ -3,6 +3,15 @@
 
 const tutorialsData = [
   {
+    date: "2026-07-18",
+    title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
+    summary: "整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
+    url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93\uff1a\u4ee3\u7801\u8c03\u8bd5 : \u56fe\u8868\u89c4\u8303 : \u8bba\u6587\u5199\u4f5c\u5168\u573a\u666f\u6a21\u677f.html",
+    cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png",
+    type: "tutorial",
+    tags: ["Jian Wu", "jwtools", "AI提示词", "科研效率", "代码调试"]
+  },
+  {
     date: "2026-07-17",
     title: "如何把新函数整合成jwtools函数",
     summary: "记录如何将新写的 R 函数按 roxygen2 + testthat 规范整合进 jwtools 包，含依赖声明、文档生成与测试流程。",
@@ -22,15 +31,6 @@ const tutorialsData = [
   },
   {
     date: "2026-07-16",
-    title: "导出AI已存储的记忆",
-    summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
-    url: "tutorials/10_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
-    cover: "",
-    type: "tutorial",
-    tags: ["Jian Wu", "AI", "记忆管理", "工具"]
-  },
-  {
-    date: "2026-07-16",
     title: "如何查看jwtools包里有哪些可用函数",
     summary: "介绍 6 种在 R 中查找已安装包导出函数的方法，从 ls() 到 NAMESPACE 源码核查，并以自建包 jwtools 为例演示。",
     url: "tutorials/1_\u67e5\u770bjwtools\u6709\u54ea\u4e9b\u51fd\u6570.html",
@@ -40,9 +40,18 @@ const tutorialsData = [
   },
   {
     date: "2026-07-16",
+    title: "导出AI已存储的记忆",
+    summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
+    url: "tutorials/50_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
+    cover: "",
+    type: "tutorial",
+    tags: ["Jian Wu", "AI", "记忆管理", "工具"]
+  },
+  {
+    date: "2026-07-16",
     title: "将记忆导入Gemini",
     summary: "从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。",
-    url: "tutorials/30_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
+    url: "tutorials/51_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
     cover: "",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
