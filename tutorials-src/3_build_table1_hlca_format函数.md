@@ -4,7 +4,7 @@ date: 2026-07-17
 summary: "将 LungAgingERV 中构建 Table 1（HLCA 格式）的脚本重构为 jwtools 包函数 build_table1_hlca_format()，支持可配置白名单、可插拔 subject_ID 解析器，跨项目复用。"
 type: tutorial
 tags: ['Jian Wu', "R", "Seurat", "jwtools"]
-cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png"
+cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_preview.png"
 ---
 
 ## 设计说明

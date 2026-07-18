@@ -1,17 +1,17 @@
-# JackNg88.github.io — Jian Wu 学术主页（多页版 + 相册/播客）
+# jianwu-atlas.github.io — Jian Wu 学术主页（多页版 + 相册/播客）
 
 个人学术主页，风格延续深森绿 (`#1b3a2d`) + 铜色 (`#c17f5a`) 配色。
 采用"数据驱动"架构：新增论文/会议/教程/照片，只需编辑 `assets/js/data/` 里的
 一个 JS 数组，无需改动任何 HTML/CSS。
 
-**在线访问：** https://jackng88.github.io/
+**在线访问：** https://jianwu-atlas.github.io/
 
 ---
 
 ## 📁 目录结构
 
 ```
-JackNg88.github.io/
+jianwu-atlas.github.io/
 ├─ index.html                首页 —— 头像/简介 + Featured Publications + 最新教程
 ├─ experience.html           科研与工作经历（时间线）
 ├─ publications.html         全部论文列表
@@ -56,7 +56,7 @@ JackNg88.github.io/
 | **暗色模式内置** | 右上角🌙按钮切换，状态存在浏览器本地，刷新页面不会丢失 |
 | **Gallery 双重分类统计** | 按「类型（照片/视频）」和「来源（本地/Google Drive）」两排独立 Tab 筛选，每个 Tab 上都带实时数量徽章，两排可以同时组合筛选 |
 | **Contact 页嵌入地图** | Google Maps 免费嵌入（无需 API Key/无需绑卡），默认卫星混合视图 |
-| **用户主页部署** | 仓库名精确匹配 `JackNg88.github.io`，GitHub 自动识别为用户主页，无需手动配置 Pages 分支，网址简洁无二级路径 |
+| **用户主页部署** | 仓库名精确匹配 `jianwu-atlas.github.io`，GitHub 自动识别为用户主页，无需手动配置 Pages 分支，网址简洁无二级路径 |
 
 ---
 
@@ -176,16 +176,16 @@ https://drive.google.com/file/d/1AbCDefGhIJKLmnop/view?usp=sharing
 
 本仓库使用 GitHub 的「用户主页」（User Site）规则部署：
 
-- 仓库名**必须**精确等于 `你的GitHub用户名.github.io`（本仓库对应 `JackNg88.github.io`）
+- 仓库名**必须**精确等于 `你的GitHub用户名.github.io`（本仓库对应 `jianwu-atlas.github.io`）
 - 一个 GitHub 账号**只能有一个**这种用户主页仓库
 - **不需要**手动去 Settings → Pages 设置分支，只要仓库名匹配规则，GitHub 会自动识别并部署
-- 网址是最简洁的根路径形式：`https://jackng88.github.io/`（没有额外的项目名路径）
+- 网址是最简洁的根路径形式：`https://jianwu-atlas.github.io/`（没有额外的项目名路径）
 
 ### 日常更新已上线的网站
 
 **方式 A —— GitHub Desktop（推荐，图形界面无需命令行）**
 1. 本地修改好文件
-2. 打开 GitHub Desktop，确认 Current Repository 是 `JackNg88.github.io`
+2. 打开 GitHub Desktop，确认 Current Repository 是 `jianwu-atlas.github.io`
 3. 左侧 Changes 会自动列出改动的文件
 4. 填写 Commit 说明 → 点击 **Commit to main**
 5. 点击 **Push origin**
@@ -224,8 +224,8 @@ python3 -m http.server 8000
 | 页面顶部内容被导航栏遮挡 | CSS `calc()` 函数里加号/减号前后缺少空格 | `calc()` 里必须写成 `calc(var(--nav-h) + 2rem)`，无空格会导致整条声明失效 |
 | 某个联系方式排版占了一整行，导致后面项目错位 | HTML 里该项带了 `ct-row-full` 这个 class | 如果不需要横跨整行显示，去掉 `ct-row-full`，改回普通的 `class="ct-row"` |
 | 浏览器窗口显示网页比预期小，四周有大片空白 | 浏览器窗口本身没有最大化（不是网页问题） | 双击浏览器标题栏或点击绿色圆点按钮让窗口铺满屏幕；网页内容本身的 `max-width` 限制是刻意设计，保证宽屏下阅读体验 |
-| 表单提交后跳转到 404 页面 | `contact.html` 里 `_next` 隐藏字段的链接路径不对 | 确认是 `https://jackng88.github.io/index.html`（根路径，不带任何仓库名） |
-| Footer/头部 GitHub 图标链接打不开 | 链接还指向旧的项目页面仓库名 | 全局搜索检查是否还有残留的旧仓库名，统一替换为 `JackNg88.github.io` |
+| 表单提交后跳转到 404 页面 | `contact.html` 里 `_next` 隐藏字段的链接路径不对 | 确认是 `https://jianwu-atlas.github.io/index.html`（根路径，不带任何仓库名） |
+| Footer/头部 GitHub 图标链接打不开 | 链接还指向旧的项目页面仓库名 | 全局搜索检查是否还有残留的旧仓库名，统一替换为 `jianwu-atlas.github.io` |
 | 保存的 .html 文件打不开 | 记事本/TextEdit 保存时格式或编码不对 | Windows 记事本另存为要选"所有文件(*.*)"；Mac TextEdit 要先切换"制作纯文本" |
 
 ---

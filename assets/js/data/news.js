@@ -11,7 +11,7 @@ const newsData = [
     category: "tool",
     title: "jwtools v0.2.0: New Cell-Type Proportion Analysis Toolkit",
     summary: "Released jwtools v0.2.0, adding ct_proportion_analysis() for donor-level cell-type proportion statistics with pairwisse significance testing and dataset/batch overlay diagnostics, plus rename_dataset_origin() and save_dual() helper functions.",
-    link: "https://github.com/JackNg88/jwtools/releases/tag/v0.2.0",
+    link: "https://github.com/jianwu-atlas/jwtools/releases/tag/v0.2.0",
     linkText: "View Release Notes →",
     logo: "assets/img/logos/jwtools-hex.png"
   },
@@ -21,7 +21,7 @@ const newsData = [
     category: "tool",
     title: "Introducing jwtools: An R Package for Single-Cell & Omics Utility Functions",
     summary: "Released jwtools, a personal R package formalizing reusable utility functions from daily single-cell and omics analysis work — starting with qs_save_workspace() and qs_load_workspace() for fast, memory-efficient workspace snapshots via the qs format. A living package, with future additions covering single-cell QC helpers, TE/ERV quantification utilities, and large-matrix data wrangling tools. Licensed under MIT.",
-    link: "https://github.com/JackNg88/jwtools",
+    link: "https://github.com/jianwu-atlas/jwtools",
     linkText: "View on GitHub →"
   },
   {

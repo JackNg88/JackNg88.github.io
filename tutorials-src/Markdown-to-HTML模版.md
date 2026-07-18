@@ -4,7 +4,7 @@ date: 2025-11-13
 summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly."
 tags: [Test]
 type: tutorial
-cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png"
+cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png"
 ---
 
 ## Test Section
