@@ -34,7 +34,7 @@ const tutorialsData = [
     title: "如何查看jwtools包里有哪些可用函数",
     summary: "介绍 6 种在 R 中查找已安装包导出函数的方法，从 ls() 到 NAMESPACE 源码核查，并以自建包 jwtools 为例演示。",
     url: "tutorials/1_\u67e5\u770bjwtools\u6709\u54ea\u4e9b\u51fd\u6570.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png",
     type: "tutorial",
     tags: ["Jian Wu", "R", "jwtools", "R包开发"]
   },
