@@ -7,7 +7,7 @@ const tutorialsData = [
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
     summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
     url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93.html",
-    cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "jwtools", "AI提示词", "科研效率", "代码调试"]
   },
@@ -52,7 +52,7 @@ const tutorialsData = [
     title: "将记忆导入Gemini",
     summary: "从 Claude 记忆导出的用户背景摘要，用于迁移到 Gemini 等其他 AI 助理，涵盖研究方向、工作偏好与指令设定。",
     url: "tutorials/51_\u5c06\u8bb0\u5fc6\u5bfc\u5165Gemini.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
@@ -61,7 +61,7 @@ const tutorialsData = [
     title: "如何上传模版文件",
     summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
     url: "tutorials/\u5982\u4f55\u4e0a\u4f20\u6a21\u7248\u6587\u4ef6.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["R", "Seurat", "标签3"]
   },
@@ -70,7 +70,7 @@ const tutorialsData = [
     title: "模版",
     summary: "模版: 这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
     url: "tutorials/\u6a21\u7248.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["R", "Seurat", "标签3"]
   },
@@ -78,8 +78,8 @@ const tutorialsData = [
     date: "2025-11-13",
     title: "Markdown-to-HTML build pipelines模版",
     summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.",
-    url: "tutorials/Markdown-to-HTML build pipelines\u6a21\u7248.html",
-    cover: "",
+    url: "tutorials/Markdown-to-HTML\u6a21\u7248.html",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Test"]
   }
