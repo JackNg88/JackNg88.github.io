@@ -1,7 +1,7 @@
 #!/bin/bash
 # ================================================
 # Cloudflare Web Analytics 批量插入脚本
-# 适用于: jackng88.github.io 静态站点
+# 适用于: jianwu-atlas.github.io 静态站点
 # 已知已插入: index.html, contact.html（跳过，避免重复插入）
 # ================================================
 

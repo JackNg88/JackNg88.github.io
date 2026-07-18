@@ -19,7 +19,14 @@ from pathlib import Path
 TARGET_DIR = "."  # 建议 cd 到仓库根目录后运行,这里用当前目录
 
 # 需要处理的文件类型
-FILE_EXTENSIONS = {".html", ".md", ".yml", ".yaml", ".json", ".css", ".js", ".Rmd"}
+#FILE_EXTENSIONS = {".html", ".md", ".yml", ".yaml", ".json", ".css", ".js", ".Rmd"}
+# 补充 .xml (sitemap)、.txt (robots.txt)、.sh (shell 脚本)
+FILE_EXTENSIONS = {
+    ".html", ".md", ".yml", ".yaml", ".json",
+    ".css", ".js", ".Rmd",
+    ".xml", ".txt",
+    ".sh",   # 新增:覆盖 add_cf_analytics.sh
+}
 
 # 替换规则:(旧字符串, 新字符串)
 # 注意顺序:先替换更具体/更长的字符串,避免被短字符串的替换污染
