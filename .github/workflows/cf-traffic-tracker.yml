@@ -1,10 +1,10 @@
 # .github/workflows/cf-traffic-tracker.yml
 #
-# 定期拉取 jackng88.github.io 的 Cloudflare Web Analytics 数据，
+# 定期拉取 jianwu-atlas.github.io 的 Cloudflare Web Analytics 数据，
 # 生成月度趋势图 + shields.io 徽章，自动提交回本仓库。
 #
 # 部署步骤：
-#   1. 把这个文件放到 jackng88.github.io 仓库的
+#   1. 把这个文件放到 jianwu-atlas.github.io 仓库的
 #      .github/workflows/cf-traffic-tracker.yml
 #   2. 把 cf_traffic_tracker.py 放到仓库根目录
 #   3. 在仓库 Settings -> Secrets and variables -> Actions 新增三个 Secret：
@@ -51,7 +51,7 @@ jobs:
             --site-tag "${{ secrets.CF_SITE_TAG }}" \
             --months 3 \
             --outdir traffic_report \
-            --site-label "jackng88.github.io"
+            --site-label "jianwu-atlas.github.io"
 
       - name: Commit updated data & chart
         run: |
