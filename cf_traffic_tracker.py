@@ -21,7 +21,7 @@ cf_traffic_tracker.py
     python cf_traffic_tracker.py \
         --account-id <Account ID> \
         --site-tag <Web Analytics Site Tag> \
-        --months 12 \
+        --months 3 \
         --outdir traffic_report \
         --site-label "jackng88.github.io"
 """
@@ -156,7 +156,9 @@ def main():
     parser = argparse.ArgumentParser(description="拉取 Cloudflare Web Analytics 数据并生成月度趋势图（供 GitHub Action 定期调用）")
     parser.add_argument("--account-id", required=True)
     parser.add_argument("--site-tag", required=True)
-    parser.add_argument("--months", type=int, default=12)
+    parser.add_argument("--months", type=int, default=3,
+                         help="回溯多少个月（默认3；Cloudflare单次查询时间跨度上限约为13周2天/93天，"
+                              "超过会报错 'time range wider than 13w2d'，因此不要设置超过约3个月）")
     parser.add_argument("--outdir", default="traffic_report")
     parser.add_argument("--site-label", default="jackng88.github.io")
     args = parser.parse_args()

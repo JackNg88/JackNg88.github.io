@@ -49,7 +49,7 @@ jobs:
           python cf_traffic_tracker.py \
             --account-id "${{ secrets.CF_ACCOUNT_ID }}" \
             --site-tag "${{ secrets.CF_SITE_TAG }}" \
-            --months 12 \
+            --months 3 \
             --outdir traffic_report \
             --site-label "jackng88.github.io"
 
