@@ -1,7 +1,7 @@
 ---
 title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板"
 date: 2026-07-18
-summary: "整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。"
+summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。"
 type: tutorial
 tags: ["Jian Wu", "jwtools", "AI提示词",'科研效率', '代码调试']
 cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png"
