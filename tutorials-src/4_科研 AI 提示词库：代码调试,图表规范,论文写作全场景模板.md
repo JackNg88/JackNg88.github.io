@@ -815,7 +815,7 @@ Locus-level分析？
 
 ---
 
-# ⑪ 针对你（LungERVmap）最值得收藏的几个 Prompt
+# ⑪ 针对你最值得收藏的几个 Prompt
 
 结合你的研究方向（单细胞 + 转座子 + Atlas + Nature论文），我认为使用频率最高的是：
 
