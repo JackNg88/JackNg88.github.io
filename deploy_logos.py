@@ -104,7 +104,7 @@ FOOTER_NEW = '''<footer class="site-footer">
 
   <div class="footer-copyright">
     © 2025 Jian Wu · CPI / MPI-BN / JLU Gießen / DZL / ILH ·
-    <a href="https://github.com/JackNg88" target="_blank">GitHub</a> ·
+    <a href="https://github.com/jianwu-atlas" target="_blank">GitHub</a> ·
     <a href="https://orcid.org/0000-0003-4720-2374" target="_blank">ORCID</a>
   </div>
 

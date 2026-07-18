@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 批量插入/升级 Cloudflare Web Analytics（自排除版）到多个 HTML 页面
-适用于: jackng88.github.io 静态站点
+适用于: jianwu-atlas.github.io 静态站点
 
 功能：
 1. 如果文件已有"旧版"Cloudflare 代码（无自排除逻辑）→ 自动替换为新版
