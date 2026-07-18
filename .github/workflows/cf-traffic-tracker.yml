@@ -1,0 +1,66 @@
+# .github/workflows/cf-traffic-tracker.yml
+#
+# 定期拉取 jackng88.github.io 的 Cloudflare Web Analytics 数据，
+# 生成月度趋势图 + shields.io 徽章，自动提交回本仓库。
+#
+# 部署步骤：
+#   1. 把这个文件放到 jackng88.github.io 仓库的
+#      .github/workflows/cf-traffic-tracker.yml
+#   2. 把 cf_traffic_tracker.py 放到仓库根目录
+#   3. 在仓库 Settings -> Secrets and variables -> Actions 新增三个 Secret：
+#        CF_API_TOKEN    Cloudflare API Token（权限：Account Analytics: Read）
+#        CF_ACCOUNT_ID   Cloudflare Account ID
+#        CF_SITE_TAG     Web Analytics 的 site tag（beacon token）
+#   4. 首次运行前，去 Actions 页面手动触发一次（workflow_dispatch）验证
+#
+# 定时策略：
+#   Cloudflare Web Analytics 数据本身没有14天限制，这里按月更新即可，
+#   设置为每月 1 号 03:00 UTC 运行一次。
+
+name: Track Cloudflare Web Analytics
+
+on:
+  schedule:
+    - cron: "0 3 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  track-cf-traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests pandas matplotlib
+
+      - name: Fetch Cloudflare Web Analytics data
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          python cf_traffic_tracker.py \
+            --account-id "${{ secrets.CF_ACCOUNT_ID }}" \
+            --site-tag "${{ secrets.CF_SITE_TAG }}" \
+            --months 12 \
+            --outdir traffic_report \
+            --site-label "jackng88.github.io"
+
+      - name: Commit updated data & chart
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add traffic_report/
+          if git diff --cached --quiet; then
+            echo "没有新数据变化，跳过提交。"
+          else
+            git commit -m "chore: update Cloudflare traffic monthly trend [skip ci]"
+            git push
+          fi
