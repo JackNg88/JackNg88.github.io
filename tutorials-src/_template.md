@@ -4,7 +4,7 @@ date: 2026-07-16
 summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。"
 type: tutorial
 tags: ["Jian Wu", "jwtools", "R", "Seurat", "标签3"]
-cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo2.png"
+cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png"
 #cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png"
 #cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png"
 ---
