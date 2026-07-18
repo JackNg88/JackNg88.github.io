@@ -16,7 +16,7 @@ const tutorialsData = [
     title: "如何把新函数整合成jwtools函数",
     summary: "记录如何将新写的 R 函数按 roxygen2 + testthat 规范整合进 jwtools 包，含依赖声明、文档生成与测试流程。",
     url: "tutorials/2_\u5982\u4f55\u628a\u65b0\u51fd\u6570\u6574\u5408\u6210jwtools\u51fd\u6570.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png",
     type: "tutorial",
     tags: ["Jian Wu", "R", "Seurat", "jwtools"]
   },
@@ -25,7 +25,7 @@ const tutorialsData = [
     title: "build_table1_hlca_format函数",
     summary: "将 LungAgingERV 中构建 Table 1（HLCA 格式）的脚本重构为 jwtools 包函数 build_table1_hlca_format()，支持可配置白名单、可插拔 subject_ID 解析器，跨项目复用。",
     url: "tutorials/3_build_table1_hlca_format\u51fd\u6570.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png",
     type: "tutorial",
     tags: ["Jian Wu", "R", "Seurat", "jwtools"]
   },
@@ -43,7 +43,7 @@ const tutorialsData = [
     title: "导出AI已存储的记忆",
     summary: "导出 Claude 中已存储的用户记忆与背景信息，用于迁移至其他 AI 助理。",
     url: "tutorials/50_\u5bfc\u51fa\u5df2\u5b58\u50a8\u7684\u8bb0\u5fc6.html",
-    cover: "",
+    cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
   },
