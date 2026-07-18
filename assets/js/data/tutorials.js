@@ -58,15 +58,6 @@ const tutorialsData = [
   },
   {
     date: "2026-07-16",
-    title: "test9",
-    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
-    url: "tutorials/test9.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
-    type: "tutorial",
-    tags: ["Jian Wu", "jwtools", "R", "Seurat", "标签3"]
-  },
-  {
-    date: "2026-07-16",
     title: "如何上传模版文件",
     summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
     url: "tutorials/\u5982\u4f55\u4e0a\u4f20\u6a21\u7248\u6587\u4ef6.html",
