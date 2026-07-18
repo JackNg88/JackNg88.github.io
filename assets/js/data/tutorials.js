@@ -5,8 +5,8 @@ const tutorialsData = [
   {
     date: "2026-07-18",
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
-    summary: "整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
-    url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93\uff1a\u4ee3\u7801\u8c03\u8bd5,\u56fe\u8868\u89c4\u8303,\u8bba\u6587\u5199\u4f5c\u5168\u573a\u666f\u6a21\u677f.html",
+    summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
+    url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93.html",
     cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "jwtools", "AI提示词", "科研效率", "代码调试"]
