@@ -6,6 +6,7 @@ type: tutorial
 tags: ["R", "Seurat", "标签3"]
 cover: "https://jackng88.github.io/assets/img/logos/Jian_Wu_logo.png"
 #cover: "https://jackng88.github.io/assets/img/logos/jwtools_logo_social_preview.png"
+#cover: "https://github.com/JackNg88/jwtools/raw/main/man/figures/logo.png"
 ---
 
 ## 小节标题
