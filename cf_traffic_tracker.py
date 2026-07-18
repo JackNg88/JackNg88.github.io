@@ -48,7 +48,7 @@ query MonthlyWebAnalytics($accountTag: String!, $siteTag: String!, $since: Time!
         orderBy: [date_ASC]
       ) {
         dimensions {
-          date: datetimeDay
+          date
         }
         count
         sum {
