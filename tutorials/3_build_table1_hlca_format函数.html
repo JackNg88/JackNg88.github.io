@@ -68,355 +68,355 @@
 <li><strong>显式命名空间</strong>：包内函数用 <code>pkg::fun()</code> 写法，避免 <code>library()</code> 依赖冲突（这是CRAN/R包开发的硬性要求）</li>
 <li><strong>roxygen2 文档</strong>：可以直接 <code>devtools::document()</code> 生成帮助文档</li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="c1">#&#39; Build a Table 1-style clinical characteristics table (HLCA format)</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; Collapses cell-level metadata from a Seurat object into a per-sample</span>
-<span class="c1">#&#39; clinical characteristics table, strictly following the column structure</span>
-<span class="c1">#&#39; of the Human Lung Cell Atlas (HLCA) reference Table 1. Uses an explicit</span>
-<span class="c1">#&#39; whitelist mechanism to avoid accidentally concatenating cell-level</span>
-<span class="c1">#&#39; variables (e.g. \code{percent.mt}, \code{nCount_RNA}, \code{Phase},</span>
-<span class="c1">#&#39; \code{seurat_clusters}) into meaningless per-sample strings.</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @param seurat_obj A \code{Seurat} object whose \code{meta.data} contains</span>
-<span class="c1">#&#39;   one row per cell, with a sample identifier column (default \code{&quot;sample&quot;}).</span>
-<span class="c1">#&#39; @param sample_col Character. Name of the column in \code{meta.data} that</span>
-<span class="c1">#&#39;   identifies the sample/library each cell belongs to. Default \code{&quot;sample&quot;}.</span>
-<span class="c1">#&#39; @param sample_level_cols Character vector. Whitelist of column names in</span>
-<span class="c1">#&#39;   \code{meta.data} that are true sample/subject-level variables (i.e.</span>
-<span class="c1">#&#39;   constant within a sample) and should therefore be collapsed to one</span>
-<span class="c1">#&#39;   value per sample. Any column not listed here is treated as cell-level</span>
-<span class="c1">#&#39;   and excluded from the collapse step. Defaults to the standard set used</span>
-<span class="c1">#&#39;   in the LungAgingERV project (see Details).</span>
-<span class="c1">#&#39; @param audit_suffix Character. Suffix used to identify &quot;locked/audited&quot;</span>
-<span class="c1">#&#39;   columns (e.g. \code{age_excel_final_v3}) that should be used to fill</span>
-<span class="c1">#&#39;   in gaps in the primary columns. Default \code{&quot;_v3&quot;}.</span>
-<span class="c1">#&#39; @param subject_id_parser A function that takes a single sample name</span>
-<span class="c1">#&#39;   (character scalar) and returns the parsed \code{subject_ID} (character</span>
-<span class="c1">#&#39;   scalar, \code{NA_character_} if unparseable). Defaults to</span>
-<span class="c1">#&#39;   \code{\link{parse_subject_id_default}}, which handles the</span>
-<span class="c1">#&#39;   \code{Hs_WT_*} and \code{Hs_Banovich_GSE*} naming conventions used in</span>
-<span class="c1">#&#39;   LungAgingERV. Supply a custom function for other projects</span>
-<span class="c1">#&#39;   (HeartERVmap, PH-ERVAtlas, etc.) with different sample naming schemes.</span>
-<span class="c1">#&#39; @param hlca_core_pattern Character (regex). Samples whose</span>
-<span class="c1">#&#39;   \code{dataset_origin} matches this pattern are labelled</span>
-<span class="c1">#&#39;   \code{&quot;core&quot;} in the output \code{HLCA_core_or_extension} column;</span>
-<span class="c1">#&#39;   all others are labelled \code{&quot;project_new (not part of HLCA)&quot;}.</span>
-<span class="c1">#&#39;   Default \code{&quot;Banovich&quot;}.</span>
-<span class="c1">#&#39; @param save_output Logical. If \code{TRUE}, writes the result table to</span>
-<span class="c1">#&#39;   \code{file.path(output_dir, paste0(output_prefix, &quot;.csv&quot;))} and</span>
-<span class="c1">#&#39;   \code{.xlsx} (with QC sheets). Default \code{FALSE} (function returns</span>
-<span class="c1">#&#39;   results in-memory only; safer default for a package function).</span>
-<span class="c1">#&#39; @param output_dir Character. Directory to write outputs to, if</span>
-<span class="c1">#&#39;   \code{save_output = TRUE}. Default \code{&quot;.&quot;}.</span>
-<span class="c1">#&#39; @param output_prefix Character. File name prefix (without extension) for</span>
-<span class="c1">#&#39;   saved outputs. Default \code{&quot;TableS1_HLCA_format&quot;}.</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @return A list with components:</span>
-<span class="c1">#&#39; \describe{</span>
-<span class="c1">#&#39;   \item{table1}{The final per-sample table, arranged and renamed to</span>
-<span class="c1">#&#39;     match the HLCA reference Table 1 column structure.}</span>
-<span class="c1">#&#39;   \item{sample_summary}{The intermediate per-sample collapsed table</span>
-<span class="c1">#&#39;     (whitelist columns only, before HLCA-format renaming), useful for</span>
-<span class="c1">#&#39;     downstream merging (e.g. with \code{merge_table1_sources()}).}</span>
-<span class="c1">#&#39;   \item{na_report}{Data frame summarising missingness per column in</span>
-<span class="c1">#&#39;     \code{table1}.}</span>
-<span class="c1">#&#39;   \item{excluded_cols}{Character vector of cell-level columns that were</span>
-<span class="c1">#&#39;     explicitly excluded from the collapse step.}</span>
-<span class="c1">#&#39;   \item{n_cells_check}{A named list with \code{table1_total} and</span>
-<span class="c1">#&#39;     \code{seurat_total}, and a logical \code{match} flag, from the</span>
-<span class="c1">#&#39;     internal QC check that \code{n_cells} sums to the total number of</span>
-<span class="c1">#&#39;     cells in \code{seurat_obj}.}</span>
-<span class="c1">#&#39; }</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @details</span>
-<span class="c1">#&#39; The default \code{sample_level_cols} whitelist is:</span>
-<span class="c1">#&#39; \code{dataset_origin, AgeGroup, AgeGroup_short, age, Biological_Sex,</span>
-<span class="c1">#&#39; single_cell_platform, sequencing_platform, cell_ranger_version,</span>
-<span class="c1">#&#39; tissue_dissociation_protocol, harmonized_ethnicity,</span>
-<span class="c1">#&#39; selfreported_ethnicity_as_collected, smoking_status, BMI,</span>
-<span class="c1">#&#39; cause_of_death, fresh_or_frozen, anatomical_region_level_1/2/3,</span>
-<span class="c1">#&#39; cells_or_nuclei, tissue_sampling_type}, plus the \code{_v3}-suffixed</span>
-<span class="c1">#&#39; audit columns (\code{age_excel_final_v3}, \code{sex_final_v3},</span>
-<span class="c1">#&#39; \code{AgeGroup_final_v3}, \code{Self_Reported_Ethnicity_v3},</span>
-<span class="c1">#&#39; \code{Ever_Smoker_v3}, \code{Disease_Status_v3}).</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; If any whitelisted column is found to have more than one distinct</span>
-<span class="c1">#&#39; non-missing value within a single sample, a warning is raised (the</span>
-<span class="c1">#&#39; first value is kept) — this usually indicates the column was</span>
-<span class="c1">#&#39; mistakenly included in the whitelist and is actually cell-level.</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @examples</span>
-<span class="c1">#&#39; \dontrun{</span>
-<span class="c1">#&#39; res &lt;- build_table1_hlca_format(immune.combined)</span>
-<span class="c1">#&#39; res$table1</span>
-<span class="c1">#&#39; res$na_report</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; # Custom subject_ID parser for a different project naming scheme:</span>
-<span class="c1">#&#39; my_parser &lt;- function(s) sub(&quot;^Sample_&quot;, &quot;&quot;, s)</span>
-<span class="c1">#&#39; res2 &lt;- build_table1_hlca_format(immune.combined, subject_id_parser = my_parser)</span>
-<span class="c1">#&#39; }</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @export</span>
-<span class="n">build_table1_hlca_format</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span>
-<span class="w">    </span><span class="n">seurat_obj</span><span class="p">,</span>
-<span class="w">    </span><span class="n">sample_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;sample&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">sample_level_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span>
-<span class="w">      </span><span class="s">&quot;dataset_origin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AgeGroup&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AgeGroup_short&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;age&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Biological_Sex&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;single_cell_platform&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sequencing_platform&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cell_ranger_version&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;tissue_dissociation_protocol&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;harmonized_ethnicity&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;selfreported_ethnicity_as_collected&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;smoking_status&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BMI&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;cause_of_death&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fresh_or_frozen&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;anatomical_region_level_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;anatomical_region_level_2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;anatomical_region_level_3&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;cells_or_nuclei&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tissue_sampling_type&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;age_excel_final_v3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sex_final_v3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AgeGroup_final_v3&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;Self_Reported_Ethnicity_v3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Ever_Smoker_v3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Disease_Status_v3&quot;</span>
-<span class="w">    </span><span class="p">),</span>
-<span class="w">    </span><span class="n">audit_suffix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;_v3&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">subject_id_parser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_subject_id_default</span><span class="p">,</span>
-<span class="w">    </span><span class="n">hlca_core_pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Banovich&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">save_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
-<span class="w">    </span><span class="n">output_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">output_prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TableS1_HLCA_format&quot;</span>
-<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<pre class="codehilite"><code class="language-r">#' Build a Table 1-style clinical characteristics table (HLCA format)
+#'
+#' Collapses cell-level metadata from a Seurat object into a per-sample
+#' clinical characteristics table, strictly following the column structure
+#' of the Human Lung Cell Atlas (HLCA) reference Table 1. Uses an explicit
+#' whitelist mechanism to avoid accidentally concatenating cell-level
+#' variables (e.g. \code{percent.mt}, \code{nCount_RNA}, \code{Phase},
+#' \code{seurat_clusters}) into meaningless per-sample strings.
+#'
+#' @param seurat_obj A \code{Seurat} object whose \code{meta.data} contains
+#'   one row per cell, with a sample identifier column (default \code{&quot;sample&quot;}).
+#' @param sample_col Character. Name of the column in \code{meta.data} that
+#'   identifies the sample/library each cell belongs to. Default \code{&quot;sample&quot;}.
+#' @param sample_level_cols Character vector. Whitelist of column names in
+#'   \code{meta.data} that are true sample/subject-level variables (i.e.
+#'   constant within a sample) and should therefore be collapsed to one
+#'   value per sample. Any column not listed here is treated as cell-level
+#'   and excluded from the collapse step. Defaults to the standard set used
+#'   in the LungAgingERV project (see Details).
+#' @param audit_suffix Character. Suffix used to identify &quot;locked/audited&quot;
+#'   columns (e.g. \code{age_excel_final_v3}) that should be used to fill
+#'   in gaps in the primary columns. Default \code{&quot;_v3&quot;}.
+#' @param subject_id_parser A function that takes a single sample name
+#'   (character scalar) and returns the parsed \code{subject_ID} (character
+#'   scalar, \code{NA_character_} if unparseable). Defaults to
+#'   \code{\link{parse_subject_id_default}}, which handles the
+#'   \code{Hs_WT_*} and \code{Hs_Banovich_GSE*} naming conventions used in
+#'   LungAgingERV. Supply a custom function for other projects
+#'   (HeartERVmap, PH-ERVAtlas, etc.) with different sample naming schemes.
+#' @param hlca_core_pattern Character (regex). Samples whose
+#'   \code{dataset_origin} matches this pattern are labelled
+#'   \code{&quot;core&quot;} in the output \code{HLCA_core_or_extension} column;
+#'   all others are labelled \code{&quot;project_new (not part of HLCA)&quot;}.
+#'   Default \code{&quot;Banovich&quot;}.
+#' @param save_output Logical. If \code{TRUE}, writes the result table to
+#'   \code{file.path(output_dir, paste0(output_prefix, &quot;.csv&quot;))} and
+#'   \code{.xlsx} (with QC sheets). Default \code{FALSE} (function returns
+#'   results in-memory only; safer default for a package function).
+#' @param output_dir Character. Directory to write outputs to, if
+#'   \code{save_output = TRUE}. Default \code{&quot;.&quot;}.
+#' @param output_prefix Character. File name prefix (without extension) for
+#'   saved outputs. Default \code{&quot;TableS1_HLCA_format&quot;}.
+#'
+#' @return A list with components:
+#' \describe{
+#'   \item{table1}{The final per-sample table, arranged and renamed to
+#'     match the HLCA reference Table 1 column structure.}
+#'   \item{sample_summary}{The intermediate per-sample collapsed table
+#'     (whitelist columns only, before HLCA-format renaming), useful for
+#'     downstream merging (e.g. with \code{merge_table1_sources()}).}
+#'   \item{na_report}{Data frame summarising missingness per column in
+#'     \code{table1}.}
+#'   \item{excluded_cols}{Character vector of cell-level columns that were
+#'     explicitly excluded from the collapse step.}
+#'   \item{n_cells_check}{A named list with \code{table1_total} and
+#'     \code{seurat_total}, and a logical \code{match} flag, from the
+#'     internal QC check that \code{n_cells} sums to the total number of
+#'     cells in \code{seurat_obj}.}
+#' }
+#'
+#' @details
+#' The default \code{sample_level_cols} whitelist is:
+#' \code{dataset_origin, AgeGroup, AgeGroup_short, age, Biological_Sex,
+#' single_cell_platform, sequencing_platform, cell_ranger_version,
+#' tissue_dissociation_protocol, harmonized_ethnicity,
+#' selfreported_ethnicity_as_collected, smoking_status, BMI,
+#' cause_of_death, fresh_or_frozen, anatomical_region_level_1/2/3,
+#' cells_or_nuclei, tissue_sampling_type}, plus the \code{_v3}-suffixed
+#' audit columns (\code{age_excel_final_v3}, \code{sex_final_v3},
+#' \code{AgeGroup_final_v3}, \code{Self_Reported_Ethnicity_v3},
+#' \code{Ever_Smoker_v3}, \code{Disease_Status_v3}).
+#'
+#' If any whitelisted column is found to have more than one distinct
+#' non-missing value within a single sample, a warning is raised (the
+#' first value is kept) — this usually indicates the column was
+#' mistakenly included in the whitelist and is actually cell-level.
+#'
+#' @examples
+#' \dontrun{
+#' res &lt;- build_table1_hlca_format(immune.combined)
+#' res$table1
+#' res$na_report
+#'
+#' # Custom subject_ID parser for a different project naming scheme:
+#' my_parser &lt;- function(s) sub(&quot;^Sample_&quot;, &quot;&quot;, s)
+#' res2 &lt;- build_table1_hlca_format(immune.combined, subject_id_parser = my_parser)
+#' }
+#'
+#' @export
+build_table1_hlca_format &lt;- function(
+    seurat_obj,
+    sample_col = &quot;sample&quot;,
+    sample_level_cols = c(
+      &quot;dataset_origin&quot;, &quot;AgeGroup&quot;, &quot;AgeGroup_short&quot;, &quot;age&quot;, &quot;Biological_Sex&quot;,
+      &quot;single_cell_platform&quot;, &quot;sequencing_platform&quot;, &quot;cell_ranger_version&quot;,
+      &quot;tissue_dissociation_protocol&quot;, &quot;harmonized_ethnicity&quot;,
+      &quot;selfreported_ethnicity_as_collected&quot;, &quot;smoking_status&quot;, &quot;BMI&quot;,
+      &quot;cause_of_death&quot;, &quot;fresh_or_frozen&quot;,
+      &quot;anatomical_region_level_1&quot;, &quot;anatomical_region_level_2&quot;, &quot;anatomical_region_level_3&quot;,
+      &quot;cells_or_nuclei&quot;, &quot;tissue_sampling_type&quot;,
+      &quot;age_excel_final_v3&quot;, &quot;sex_final_v3&quot;, &quot;AgeGroup_final_v3&quot;,
+      &quot;Self_Reported_Ethnicity_v3&quot;, &quot;Ever_Smoker_v3&quot;, &quot;Disease_Status_v3&quot;
+    ),
+    audit_suffix = &quot;_v3&quot;,
+    subject_id_parser = parse_subject_id_default,
+    hlca_core_pattern = &quot;Banovich&quot;,
+    save_output = FALSE,
+    output_dir = &quot;.&quot;,
+    output_prefix = &quot;TableS1_HLCA_format&quot;
+) {
 
-<span class="w">  </span><span class="nf">stopifnot</span><span class="p">(</span><span class="nf">inherits</span><span class="p">(</span><span class="n">seurat_obj</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Seurat&quot;</span><span class="p">))</span>
-<span class="w">  </span><span class="n">meta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">seurat_obj</span><span class="o">@</span><span class="n">meta.data</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="n">sample_col</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">stop</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;sample_col &#39;%s&#39; not found in seurat_obj@meta.data&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sample_col</span><span class="p">))</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="n">sample_col</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;sample&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">meta</span><span class="p">[[</span><span class="s">&quot;sample&quot;</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meta</span><span class="p">[[</span><span class="n">sample_col</span><span class="p">]]</span>
-<span class="w">  </span><span class="p">}</span>
+  stopifnot(inherits(seurat_obj, &quot;Seurat&quot;))
+  meta &lt;- seurat_obj@meta.data
+  if (!sample_col %in% colnames(meta)) {
+    stop(sprintf(&quot;sample_col '%s' not found in seurat_obj@meta.data&quot;, sample_col))
+  }
+  if (sample_col != &quot;sample&quot;) {
+    meta[[&quot;sample&quot;]] &lt;- meta[[sample_col]]
+  }
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 1. Whitelist detection (cell-level columns are explicitly excluded)</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">sample_level_cols_available</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">intersect</span><span class="p">(</span><span class="n">sample_level_cols</span><span class="p">,</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
-<span class="w">  </span><span class="n">missing_from_whitelist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">setdiff</span><span class="p">(</span><span class="n">sample_level_cols</span><span class="p">,</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">missing_from_whitelist</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">message</span><span class="p">(</span><span class="s">&quot;The following whitelisted columns were not found in meta.data and will be skipped: &quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nf">paste</span><span class="p">(</span><span class="n">missing_from_whitelist</span><span class="p">,</span><span class="w"> </span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">))</span>
-<span class="w">  </span><span class="p">}</span>
+  # ----------------------------------------------------------------
+  # Step 1. Whitelist detection (cell-level columns are explicitly excluded)
+  # ----------------------------------------------------------------
+  sample_level_cols_available &lt;- intersect(sample_level_cols, colnames(meta))
+  missing_from_whitelist &lt;- setdiff(sample_level_cols, colnames(meta))
+  if (length(missing_from_whitelist) &gt; 0) {
+    message(&quot;The following whitelisted columns were not found in meta.data and will be skipped: &quot;,
+            paste(missing_from_whitelist, collapse = &quot;, &quot;))
+  }
 
-<span class="w">  </span><span class="n">cell_level_cols_excluded</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">setdiff</span><span class="p">(</span><span class="nf">colnames</span><span class="p">(</span><span class="n">meta</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;sample&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sample_level_cols_available</span><span class="p">))</span>
+  cell_level_cols_excluded &lt;- setdiff(colnames(meta), c(&quot;sample&quot;, sample_level_cols_available))
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 2. Collapse: keep the unique non-NA value per sample per column</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">safe_first_unique</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">colname</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">]</span>
-<span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="w">    </span><span class="nf">if </span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="kc">NA_character_</span><span class="p">)</span>
-<span class="w">    </span><span class="nf">if </span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nf">warning</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span>
-<span class="w">        </span><span class="s">&quot;Column &#39;%s&#39; has %d distinct non-missing values within a single sample: %s (keeping the first; check whether this column truly belongs in the whitelist)&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">colname</span><span class="p">,</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">u</span><span class="p">),</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; | &quot;</span><span class="p">)</span>
-<span class="w">      </span><span class="p">))</span>
-<span class="w">      </span><span class="nf">return</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">u</span>
-<span class="w">  </span><span class="p">}</span>
+  # ----------------------------------------------------------------
+  # Step 2. Collapse: keep the unique non-NA value per sample per column
+  # ----------------------------------------------------------------
+  safe_first_unique &lt;- function(x, colname) {
+    x &lt;- x[!is.na(x) &amp; as.character(x) != &quot;&quot;]
+    u &lt;- unique(as.character(x))
+    if (length(u) == 0) return(NA_character_)
+    if (length(u) &gt; 1) {
+      warning(sprintf(
+        &quot;Column '%s' has %d distinct non-missing values within a single sample: %s (keeping the first; check whether this column truly belongs in the whitelist)&quot;,
+        colname, length(u), paste(u, collapse = &quot; | &quot;)
+      ))
+      return(u[1])
+    }
+    u
+  }
 
-<span class="w">  </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meta</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">sample</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise</span><span class="p">(</span>
-<span class="w">      </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">across</span><span class="p">(</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">all_of</span><span class="p">(</span><span class="n">sample_level_cols_available</span><span class="p">),</span>
-<span class="w">                     </span><span class="o">~</span><span class="w"> </span><span class="nf">safe_first_unique</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">cur_column</span><span class="p">())),</span>
-<span class="w">      </span><span class="n">n_cells_this_project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">n</span><span class="p">(),</span>
-<span class="w">      </span><span class="n">.groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;drop&quot;</span>
-<span class="w">    </span><span class="p">)</span>
+  sample_summary &lt;- meta %&gt;%
+    dplyr::group_by(.data$sample) %&gt;%
+    dplyr::summarise(
+      dplyr::across(dplyr::all_of(sample_level_cols_available),
+                     ~ safe_first_unique(.x, dplyr::cur_column())),
+      n_cells_this_project = dplyr::n(),
+      .groups = &quot;drop&quot;
+    )
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 3. Parse subject_ID via injectable parser function</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">sample_summary</span><span class="o">$</span><span class="n">subject_ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">vapply</span><span class="p">(</span><span class="n">sample_summary</span><span class="o">$</span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="n">subject_id_parser</span><span class="p">,</span>
-<span class="w">                                       </span><span class="n">FUN.VALUE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">character</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+  # ----------------------------------------------------------------
+  # Step 3. Parse subject_ID via injectable parser function
+  # ----------------------------------------------------------------
+  sample_summary$subject_ID &lt;- vapply(sample_summary$sample, subject_id_parser,
+                                       FUN.VALUE = character(1))
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 4. Field harmonization: primary column first, audit(_v3) column as fallback</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">audit_col</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">base</span><span class="p">)</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">base</span><span class="p">,</span><span class="w"> </span><span class="n">audit_suffix</span><span class="p">)</span>
-<span class="w">  </span><span class="n">has_col</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span><span class="w"> </span><span class="n">nm</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">sample_summary</span><span class="p">)</span>
+  # ----------------------------------------------------------------
+  # Step 4. Field harmonization: primary column first, audit(_v3) column as fallback
+  # ----------------------------------------------------------------
+  audit_col &lt;- function(base) paste0(base, audit_suffix)
+  has_col &lt;- function(nm) nm %in% colnames(sample_summary)
 
-<span class="w">  </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span>
-<span class="w">      </span><span class="n">age_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span>
-<span class="w">        </span><span class="nf">suppressWarnings</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;age&quot;</span><span class="p">]])),</span>
-<span class="w">        </span><span class="nf">if </span><span class="p">(</span><span class="nf">has_col</span><span class="p">(</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;age_excel_final&quot;</span><span class="p">)))</span><span class="w"> </span><span class="nf">suppressWarnings</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;age_excel_final&quot;</span><span class="p">)]]))</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="kc">NA_real_</span>
-<span class="w">      </span><span class="p">),</span>
-<span class="w">      </span><span class="n">sex_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">tolower</span><span class="p">(</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span>
-<span class="w">        </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;Biological_Sex&quot;</span><span class="p">]],</span>
-<span class="w">        </span><span class="nf">if </span><span class="p">(</span><span class="nf">has_col</span><span class="p">(</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;sex_final&quot;</span><span class="p">)))</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;sex_final&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">      </span><span class="p">)),</span>
-<span class="w">      </span><span class="n">ethnicity_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span>
-<span class="w">        </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;harmonized_ethnicity&quot;</span><span class="p">]],</span>
-<span class="w">        </span><span class="nf">if </span><span class="p">(</span><span class="nf">has_col</span><span class="p">(</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Self_Reported_Ethnicity&quot;</span><span class="p">)))</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Self_Reported_Ethnicity&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">      </span><span class="p">),</span>
-<span class="w">      </span><span class="n">selfreported_ethnicity_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span>
-<span class="w">        </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;selfreported_ethnicity_as_collected&quot;</span><span class="p">]],</span>
-<span class="w">        </span><span class="nf">if </span><span class="p">(</span><span class="nf">has_col</span><span class="p">(</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Self_Reported_Ethnicity&quot;</span><span class="p">)))</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Self_Reported_Ethnicity&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">      </span><span class="p">),</span>
-<span class="w">      </span><span class="n">smoking_status_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span>
-<span class="w">        </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;smoking_status&quot;</span><span class="p">]],</span>
-<span class="w">        </span><span class="nf">if </span><span class="p">(</span><span class="nf">has_col</span><span class="p">(</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Ever_Smoker&quot;</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">case_when</span><span class="p">(</span>
-<span class="w">            </span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Ever_Smoker&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Y&quot;</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="s">&quot;active_or_former&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">.data</span><span class="p">[[</span><span class="nf">audit_col</span><span class="p">(</span><span class="s">&quot;Ever_Smoker&quot;</span><span class="p">)]]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;N&quot;</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="s">&quot;never&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="kc">TRUE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">          </span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">      </span><span class="p">),</span>
-<span class="w">      </span><span class="n">lung_condition_final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Healthy&quot;</span><span class="w">  </span><span class="c1"># default assumption for healthy-aging cohorts; adjust for disease projects</span>
-<span class="w">    </span><span class="p">)</span>
+  sample_summary &lt;- sample_summary %&gt;%
+    dplyr::mutate(
+      age_final = dplyr::coalesce(
+        suppressWarnings(as.numeric(.data[[&quot;age&quot;]])),
+        if (has_col(audit_col(&quot;age_excel_final&quot;))) suppressWarnings(as.numeric(.data[[audit_col(&quot;age_excel_final&quot;)]])) else NA_real_
+      ),
+      sex_final = tolower(dplyr::coalesce(
+        .data[[&quot;Biological_Sex&quot;]],
+        if (has_col(audit_col(&quot;sex_final&quot;))) .data[[audit_col(&quot;sex_final&quot;)]] else NA_character_
+      )),
+      ethnicity_final = dplyr::coalesce(
+        .data[[&quot;harmonized_ethnicity&quot;]],
+        if (has_col(audit_col(&quot;Self_Reported_Ethnicity&quot;))) .data[[audit_col(&quot;Self_Reported_Ethnicity&quot;)]] else NA_character_
+      ),
+      selfreported_ethnicity_final = dplyr::coalesce(
+        .data[[&quot;selfreported_ethnicity_as_collected&quot;]],
+        if (has_col(audit_col(&quot;Self_Reported_Ethnicity&quot;))) .data[[audit_col(&quot;Self_Reported_Ethnicity&quot;)]] else NA_character_
+      ),
+      smoking_status_final = dplyr::coalesce(
+        .data[[&quot;smoking_status&quot;]],
+        if (has_col(audit_col(&quot;Ever_Smoker&quot;))) {
+          dplyr::case_when(
+            .data[[audit_col(&quot;Ever_Smoker&quot;)]] == &quot;Y&quot; ~ &quot;active_or_former&quot;,
+            .data[[audit_col(&quot;Ever_Smoker&quot;)]] == &quot;N&quot; ~ &quot;never&quot;,
+            TRUE ~ NA_character_
+          )
+        } else NA_character_
+      ),
+      lung_condition_final = &quot;Healthy&quot;  # default assumption for healthy-aging cohorts; adjust for disease projects
+    )
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 5. HLCA_core_or_extension + dataset/study labels</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span>
-<span class="w">      </span><span class="n">HLCA_core_or_extension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">if_else</span><span class="p">(</span>
-<span class="w">        </span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_detect</span><span class="p">(</span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;dataset_origin&quot;</span><span class="p">]],</span><span class="w"> </span><span class="n">hlca_core_pattern</span><span class="p">),</span>
-<span class="w">        </span><span class="s">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;project_new (not part of HLCA)&quot;</span>
-<span class="w">      </span><span class="p">),</span>
-<span class="w">      </span><span class="n">dataset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;dataset_origin&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">study</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;dataset_origin&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">mixed_harmonized_ethnicity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA_character_</span><span class="p">,</span>
-<span class="w">      </span><span class="n">mixed_selfreported_ethnicity_as_collected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA_character_</span>
-<span class="w">    </span><span class="p">)</span>
+  # ----------------------------------------------------------------
+  # Step 5. HLCA_core_or_extension + dataset/study labels
+  # ----------------------------------------------------------------
+  sample_summary &lt;- sample_summary %&gt;%
+    dplyr::mutate(
+      HLCA_core_or_extension = dplyr::if_else(
+        stringr::str_detect(.data[[&quot;dataset_origin&quot;]], hlca_core_pattern),
+        &quot;core&quot;, &quot;project_new (not part of HLCA)&quot;
+      ),
+      dataset = .data[[&quot;dataset_origin&quot;]],
+      study   = .data[[&quot;dataset_origin&quot;]],
+      mixed_harmonized_ethnicity = NA_character_,
+      mixed_selfreported_ethnicity_as_collected = NA_character_
+    )
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 6. Reassemble in HLCA reference column order</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">table1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample_summary</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">transmute</span><span class="p">(</span>
-<span class="w">      </span><span class="n">sample</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">sample</span><span class="p">,</span>
-<span class="w">      </span><span class="n">HLCA_core_or_extension</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">HLCA_core_or_extension</span><span class="p">,</span>
-<span class="w">      </span><span class="n">dataset</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">dataset</span><span class="p">,</span>
-<span class="w">      </span><span class="n">study</span><span class="w">                     </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">study</span><span class="p">,</span>
-<span class="w">      </span><span class="n">n_cells</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">n_cells_this_project</span><span class="p">,</span>
-<span class="w">      </span><span class="n">subject_ID</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">subject_ID</span><span class="p">,</span>
-<span class="w">      </span><span class="n">`age*`</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">age_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">sex</span><span class="w">                       </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">sex_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">lung_condition</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">lung_condition_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">cells_or_nuclei</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;cells_or_nuclei&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">single_cell_platform</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;single_cell_platform&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">tissue_sampling_type</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;tissue_sampling_type&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">tissue_dissociation_protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;tissue_dissociation_protocol&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">harmonized_ethnicity</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">ethnicity_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">selfreported_ethnicity_as_collected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">selfreported_ethnicity_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">mixed_harmonized_ethnicity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">mixed_harmonized_ethnicity</span><span class="p">,</span>
-<span class="w">      </span><span class="n">mixed_selfreported_ethnicity_as_collected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">mixed_selfreported_ethnicity_as_collected</span><span class="p">,</span>
-<span class="w">      </span><span class="n">smoking_status</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">smoking_status_final</span><span class="p">,</span>
-<span class="w">      </span><span class="n">BMI</span><span class="w">                       </span><span class="o">=</span><span class="w"> </span><span class="nf">suppressWarnings</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;BMI&quot;</span><span class="p">]])),</span>
-<span class="w">      </span><span class="n">cause_of_death</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;cause_of_death&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">sequencing_platform</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;sequencing_platform&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">cell_ranger_version</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;cell_ranger_version&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">fresh_or_frozen</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;fresh_or_frozen&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">anatomical_region_level_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;anatomical_region_level_1&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">anatomical_region_level_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;anatomical_region_level_2&quot;</span><span class="p">]],</span>
-<span class="w">      </span><span class="n">anatomical_region_level_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.data</span><span class="p">[[</span><span class="s">&quot;anatomical_region_level_3&quot;</span><span class="p">]]</span>
-<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
-<span class="w">    </span><span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">HLCA_core_or_extension</span><span class="p">,</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">`age*`</span><span class="p">,</span><span class="w"> </span><span class="n">.data</span><span class="o">$</span><span class="n">sample</span><span class="p">)</span>
+  # ----------------------------------------------------------------
+  # Step 6. Reassemble in HLCA reference column order
+  # ----------------------------------------------------------------
+  table1 &lt;- sample_summary %&gt;%
+    dplyr::transmute(
+      sample                    = .data$sample,
+      HLCA_core_or_extension    = .data$HLCA_core_or_extension,
+      dataset                   = .data$dataset,
+      study                     = .data$study,
+      n_cells                   = .data$n_cells_this_project,
+      subject_ID                = .data$subject_ID,
+      `age*`                    = .data$age_final,
+      sex                       = .data$sex_final,
+      lung_condition            = .data$lung_condition_final,
+      cells_or_nuclei           = .data[[&quot;cells_or_nuclei&quot;]],
+      single_cell_platform      = .data[[&quot;single_cell_platform&quot;]],
+      tissue_sampling_type      = .data[[&quot;tissue_sampling_type&quot;]],
+      tissue_dissociation_protocol = .data[[&quot;tissue_dissociation_protocol&quot;]],
+      harmonized_ethnicity      = .data$ethnicity_final,
+      selfreported_ethnicity_as_collected = .data$selfreported_ethnicity_final,
+      mixed_harmonized_ethnicity = .data$mixed_harmonized_ethnicity,
+      mixed_selfreported_ethnicity_as_collected = .data$mixed_selfreported_ethnicity_as_collected,
+      smoking_status            = .data$smoking_status_final,
+      BMI                       = suppressWarnings(as.numeric(.data[[&quot;BMI&quot;]])),
+      cause_of_death            = .data[[&quot;cause_of_death&quot;]],
+      sequencing_platform       = .data[[&quot;sequencing_platform&quot;]],
+      cell_ranger_version       = .data[[&quot;cell_ranger_version&quot;]],
+      fresh_or_frozen           = .data[[&quot;fresh_or_frozen&quot;]],
+      anatomical_region_level_1 = .data[[&quot;anatomical_region_level_1&quot;]],
+      anatomical_region_level_2 = .data[[&quot;anatomical_region_level_2&quot;]],
+      anatomical_region_level_3 = .data[[&quot;anatomical_region_level_3&quot;]]
+    ) %&gt;%
+    dplyr::arrange(.data$HLCA_core_or_extension, .data$`age*`, .data$sample)
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 7. QC: n_cells sum vs actual total cell count</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="n">total_table1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">table1</span><span class="o">$</span><span class="n">n_cells</span><span class="p">)</span>
-<span class="w">  </span><span class="n">total_seurat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">seurat_obj</span><span class="p">)</span>
-<span class="w">  </span><span class="n">n_cells_check</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
-<span class="w">    </span><span class="n">table1_total</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">total_table1</span><span class="p">,</span>
-<span class="w">    </span><span class="n">seurat_total</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">total_seurat</span><span class="p">,</span>
-<span class="w">    </span><span class="n">match</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="nf">identical</span><span class="p">(</span><span class="n">total_table1</span><span class="p">,</span><span class="w"> </span><span class="n">total_seurat</span><span class="p">)</span>
-<span class="w">  </span><span class="p">)</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="n">n_cells_check</span><span class="o">$</span><span class="n">match</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">warning</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span>
-<span class="w">      </span><span class="s">&quot;n_cells sum in table1 (%d) does not match total cells in seurat_obj (%d). Check for unsampled cells.&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="n">total_table1</span><span class="p">,</span><span class="w"> </span><span class="n">total_seurat</span>
-<span class="w">    </span><span class="p">))</span>
-<span class="w">  </span><span class="p">}</span>
+  # ----------------------------------------------------------------
+  # Step 7. QC: n_cells sum vs actual total cell count
+  # ----------------------------------------------------------------
+  total_table1 &lt;- sum(table1$n_cells)
+  total_seurat &lt;- ncol(seurat_obj)
+  n_cells_check &lt;- list(
+    table1_total  = total_table1,
+    seurat_total  = total_seurat,
+    match         = identical(total_table1, total_seurat)
+  )
+  if (!n_cells_check$match) {
+    warning(sprintf(
+      &quot;n_cells sum in table1 (%d) does not match total cells in seurat_obj (%d). Check for unsampled cells.&quot;,
+      total_table1, total_seurat
+    ))
+  }
 
-<span class="w">  </span><span class="n">na_report</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span>
-<span class="w">    </span><span class="n">column</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">table1</span><span class="p">),</span>
-<span class="w">    </span><span class="n">n_missing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sapply</span><span class="p">(</span><span class="n">table1</span><span class="p">,</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">))),</span>
-<span class="w">    </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span>
-<span class="w">  </span><span class="p">)</span>
-<span class="w">  </span><span class="n">na_report</span><span class="o">$</span><span class="n">pct_missing</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="m">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">na_report</span><span class="o">$</span><span class="n">n_missing</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">nrow</span><span class="p">(</span><span class="n">table1</span><span class="p">),</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="w">  </span><span class="n">na_report</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">na_report</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="o">-</span><span class="n">na_report</span><span class="o">$</span><span class="n">n_missing</span><span class="p">),</span><span class="w"> </span><span class="p">]</span>
+  na_report &lt;- data.frame(
+    column = colnames(table1),
+    n_missing = sapply(table1, function(x) sum(is.na(x))),
+    row.names = NULL
+  )
+  na_report$pct_missing &lt;- round(100 * na_report$n_missing / nrow(table1), 1)
+  na_report &lt;- na_report[order(-na_report$n_missing), ]
 
-<span class="w">  </span><span class="n">result</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
-<span class="w">    </span><span class="n">table1</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">table1</span><span class="p">,</span>
-<span class="w">    </span><span class="n">sample_summary</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">sample_summary</span><span class="p">,</span>
-<span class="w">    </span><span class="n">na_report</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">na_report</span><span class="p">,</span>
-<span class="w">    </span><span class="n">excluded_cols</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">cell_level_cols_excluded</span><span class="p">,</span>
-<span class="w">    </span><span class="n">n_cells_check</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">n_cells_check</span>
-<span class="w">  </span><span class="p">)</span>
+  result &lt;- list(
+    table1          = table1,
+    sample_summary  = sample_summary,
+    na_report       = na_report,
+    excluded_cols   = cell_level_cols_excluded,
+    n_cells_check   = n_cells_check
+  )
 
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="c1"># Step 8. Optional file output</span>
-<span class="w">  </span><span class="c1"># ----------------------------------------------------------------</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="nf">isTRUE</span><span class="p">(</span><span class="n">save_output</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nf">dir.create</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="w"> </span><span class="n">showWarnings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">recursive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
-<span class="w">    </span><span class="n">csv_path</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">output_prefix</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.csv&quot;</span><span class="p">))</span>
-<span class="w">    </span><span class="n">xlsx_path</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="n">output_prefix</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.xlsx&quot;</span><span class="p">))</span>
+  # ----------------------------------------------------------------
+  # Step 8. Optional file output
+  # ----------------------------------------------------------------
+  if (isTRUE(save_output)) {
+    dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+    csv_path  &lt;- file.path(output_dir, paste0(output_prefix, &quot;.csv&quot;))
+    xlsx_path &lt;- file.path(output_dir, paste0(output_prefix, &quot;.xlsx&quot;))
 
-<span class="w">    </span><span class="n">utils</span><span class="o">::</span><span class="nf">write.csv</span><span class="p">(</span><span class="n">table1</span><span class="p">,</span><span class="w"> </span><span class="n">csv_path</span><span class="p">,</span><span class="w"> </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+    utils::write.csv(table1, csv_path, row.names = FALSE)
 
-<span class="w">    </span><span class="n">wb</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">createWorkbook</span><span class="p">()</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">addWorksheet</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TableS1_HLCA_format&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">writeData</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TableS1_HLCA_format&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">table1</span><span class="p">)</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">addWorksheet</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Missing_value_report&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">writeData</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Missing_value_report&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">na_report</span><span class="p">)</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">addWorksheet</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Excluded_cell_level_cols&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">writeData</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Excluded_cell_level_cols&quot;</span><span class="p">,</span>
-<span class="w">                         </span><span class="nf">data.frame</span><span class="p">(</span><span class="n">excluded_column</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cell_level_cols_excluded</span><span class="p">))</span>
-<span class="w">    </span><span class="n">openxlsx</span><span class="o">::</span><span class="nf">saveWorkbook</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span><span class="w"> </span><span class="n">xlsx_path</span><span class="p">,</span><span class="w"> </span><span class="n">overwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
+    wb &lt;- openxlsx::createWorkbook()
+    openxlsx::addWorksheet(wb, &quot;TableS1_HLCA_format&quot;)
+    openxlsx::writeData(wb, &quot;TableS1_HLCA_format&quot;, table1)
+    openxlsx::addWorksheet(wb, &quot;Missing_value_report&quot;)
+    openxlsx::writeData(wb, &quot;Missing_value_report&quot;, na_report)
+    openxlsx::addWorksheet(wb, &quot;Excluded_cell_level_cols&quot;)
+    openxlsx::writeData(wb, &quot;Excluded_cell_level_cols&quot;,
+                         data.frame(excluded_column = cell_level_cols_excluded))
+    openxlsx::saveWorkbook(wb, xlsx_path, overwrite = TRUE)
 
-<span class="w">    </span><span class="nf">message</span><span class="p">(</span><span class="s">&quot;Saved: &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">csv_path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; and &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">xlsx_path</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span>
+    message(&quot;Saved: &quot;, csv_path, &quot; and &quot;, xlsx_path)
+  }
 
-<span class="w">  </span><span class="n">result</span>
-<span class="p">}</span>
+  result
+}
 
 
-<span class="c1">#&#39; Default subject_ID parser for LungAgingERV sample naming conventions</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; Parses \code{subject_ID} from sample names following either the</span>
-<span class="c1">#&#39; \code{Hs_WT_{AgeGroup}_{subjectID}_{age}} pattern (CPI_WT cohort) or</span>
-<span class="c1">#&#39; the \code{Hs_Banovich_{GSExxxxx}_{AgeGroup}_{subjectID}} pattern</span>
-<span class="c1">#&#39; (Banovich/HLCA-extension cohort).</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; @param s Character scalar. A single sample name.</span>
-<span class="c1">#&#39; @return Character scalar: the parsed subject ID, or \code{NA_character_}</span>
-<span class="c1">#&#39;   if the sample name does not match either pattern.</span>
-<span class="c1">#&#39; @export</span>
-<span class="n">parse_subject_id_default</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">m_wt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_match</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;^Hs_WT_(Young|Middle|Old)_([A-Za-z0-9]+)_([0-9]+)$&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">m_wt</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="n">m_wt</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">])</span>
-<span class="w">  </span><span class="n">m_ban</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_match</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;^Hs_Banovich_(GSE[0-9]+)_(Young|Middle|Old)_([A-Za-z0-9_]+)$&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">m_ban</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="n">m_ban</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">])</span>
-<span class="w">  </span><span class="kc">NA_character_</span>
-<span class="p">}</span>
-</code></pre></div>
+#' Default subject_ID parser for LungAgingERV sample naming conventions
+#'
+#' Parses \code{subject_ID} from sample names following either the
+#' \code{Hs_WT_{AgeGroup}_{subjectID}_{age}} pattern (CPI_WT cohort) or
+#' the \code{Hs_Banovich_{GSExxxxx}_{AgeGroup}_{subjectID}} pattern
+#' (Banovich/HLCA-extension cohort).
+#'
+#' @param s Character scalar. A single sample name.
+#' @return Character scalar: the parsed subject ID, or \code{NA_character_}
+#'   if the sample name does not match either pattern.
+#' @export
+parse_subject_id_default &lt;- function(s) {
+  m_wt &lt;- stringr::str_match(s, &quot;^Hs_WT_(Young|Middle|Old)_([A-Za-z0-9]+)_([0-9]+)$&quot;)
+  if (!is.na(m_wt[1, 1])) return(m_wt[1, 3])
+  m_ban &lt;- stringr::str_match(s, &quot;^Hs_Banovich_(GSE[0-9]+)_(Young|Middle|Old)_([A-Za-z0-9_]+)$&quot;)
+  if (!is.na(m_ban[1, 1])) return(m_ban[1, 4])
+  NA_character_
+}
+</code></pre>
 
 <h2 id="jwtools">集成到 jwtools 的步骤</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 把上面两个函数存为 jwtools 包内的文件</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_r</span><span class="p">(</span><span class="s">&quot;build_table1_hlca_format&quot;</span><span class="p">)</span><span class="w">   </span><span class="c1"># 会打开对应的 R/ 文件</span>
+<pre class="codehilite"><code class="language-r"># 1. 把上面两个函数存为 jwtools 包内的文件
+usethis::use_r(&quot;build_table1_hlca_format&quot;)   # 会打开对应的 R/ 文件
 
-<span class="c1"># 2. 确保 DESCRIPTION 里声明了依赖(若尚未声明)</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package</span><span class="p">(</span><span class="s">&quot;dplyr&quot;</span><span class="p">)</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package</span><span class="p">(</span><span class="s">&quot;stringr&quot;</span><span class="p">)</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package</span><span class="p">(</span><span class="s">&quot;openxlsx&quot;</span><span class="p">)</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package</span><span class="p">(</span><span class="s">&quot;Seurat&quot;</span><span class="p">)</span>
+# 2. 确保 DESCRIPTION 里声明了依赖(若尚未声明)
+usethis::use_package(&quot;dplyr&quot;)
+usethis::use_package(&quot;stringr&quot;)
+usethis::use_package(&quot;openxlsx&quot;)
+usethis::use_package(&quot;Seurat&quot;)
 
-<span class="c1"># 3. 生成文档</span>
-<span class="n">devtools</span><span class="o">::</span><span class="nf">document</span><span class="p">()</span>
+# 3. 生成文档
+devtools::document()
 
-<span class="c1"># 4. 本地测试</span>
-<span class="n">devtools</span><span class="o">::</span><span class="nf">load_all</span><span class="p">()</span>
-<span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_table1_hlca_format</span><span class="p">(</span><span class="n">immune.combined</span><span class="p">,</span><span class="w"> </span><span class="n">save_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">output_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;results&quot;</span><span class="p">)</span>
-<span class="n">res</span><span class="o">$</span><span class="n">table1</span>
-<span class="n">res</span><span class="o">$</span><span class="n">na_report</span>
-</code></pre></div>
+# 4. 本地测试
+devtools::load_all()
+res &lt;- build_table1_hlca_format(immune.combined, save_output = TRUE, output_dir = &quot;results&quot;)
+res$table1
+res$na_report
+</code></pre>
 
 <h2 id="_2">相比原脚本的关键改进</h2>
 <table>

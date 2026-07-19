@@ -61,39 +61,39 @@
   <div class="section tut-article-body">
     <p>在 R 中查找 <code>jwtools</code> 包里有哪些可用函数，有几种常用方法，按推荐程度列出：</p>
 <h2 id="1-ls">1. <code>ls()</code> 查看已加载包的所有导出对象（最常用）</h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">jwtools</span><span class="p">)</span>
-<span class="nf">ls</span><span class="p">(</span><span class="s">&quot;package:jwtools&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">library(jwtools)
+ls(&quot;package:jwtools&quot;)
+</code></pre>
 
 <h2 id="2">2. 不加载包，直接列出所有导出函数</h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">ls</span><span class="p">(</span><span class="nf">getNamespace</span><span class="p">(</span><span class="s">&quot;jwtools&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">all.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="c1"># 或</span>
-<span class="nf">ls</span><span class="p">(</span><span class="s">&quot;package:jwtools&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1"># 需先 library(jwtools)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">ls(getNamespace(&quot;jwtools&quot;), all.names = FALSE)
+# 或
+ls(&quot;package:jwtools&quot;)  # 需先 library(jwtools)
+</code></pre>
 
 <h2 id="3-html">3. 查看包的帮助文档索引（会打开一个 HTML 页面，列出所有带文档的函数）</h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">help</span><span class="p">(</span><span class="n">package</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;jwtools&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">help(package = &quot;jwtools&quot;)
+</code></pre>
 
 <h2 id="4-lsfstr">4. 用 <code>lsf.str()</code> 同时看函数和参数签名（更直观）</h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">jwtools</span><span class="p">)</span>
-<span class="nf">lsf.str</span><span class="p">(</span><span class="s">&quot;package:jwtools&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">library(jwtools)
+lsf.str(&quot;package:jwtools&quot;)
+</code></pre>
 
 <h2 id="5-internal">5. 如果你想连<strong>未导出（internal）的函数</strong>也一起看</h2>
-<div class="codehilite"><pre><span></span><code><span class="nf">ls</span><span class="p">(</span><span class="nf">getNamespace</span><span class="p">(</span><span class="s">&quot;jwtools&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">all.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">ls(getNamespace(&quot;jwtools&quot;), all.names = TRUE)
+</code></pre>
 
 <h2 id="6-namespace">6. 查看包的 NAMESPACE 文件（源码层面，最准确）</h2>
 <p>如果你本地有源码（比如 <code>~/Documents/GitHub/jwtools</code>），可以直接看：</p>
-<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>NAMESPACE
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">cat NAMESPACE
+</code></pre>
 
 <p>或者在 R 里：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 如果包是通过 devtools::load_all() 加载的</span>
-<span class="n">devtools</span><span class="o">::</span><span class="nf">load_all</span><span class="p">(</span><span class="s">&quot;~/path/to/jwtools&quot;</span><span class="p">)</span>
-<span class="nf">ls</span><span class="p">(</span><span class="s">&quot;package:jwtools&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r"># 如果包是通过 devtools::load_all() 加载的
+devtools::load_all(&quot;~/path/to/jwtools&quot;)
+ls(&quot;package:jwtools&quot;)
+</code></pre>
 
 <hr />
 <h3 id="jwtools">💡 针对你目前 jwtools 的情况</h3>
@@ -101,9 +101,9 @@
 - <code>qs_save_workspace()</code>
 - <code>qs_load_workspace()</code></p>
 <p>如果你想快速确认这两个（以及可能后续新增的函数）是否都已正确导出并可用，最直接的方式是：</p>
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">jwtools</span><span class="p">)</span>
-<span class="nf">ls</span><span class="p">(</span><span class="s">&quot;package:jwtools&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">library(jwtools)
+ls(&quot;package:jwtools&quot;)
+</code></pre>
 
 <p>如果输出为空或缺函数，很可能是 <code>NAMESPACE</code> 没有正确 <code>export()</code>，或者包还没有重新 <code>devtools::document()</code> + 重装。</p>
   </div>

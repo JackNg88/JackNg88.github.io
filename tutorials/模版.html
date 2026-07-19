@@ -62,10 +62,10 @@
     <h2 id="_1">小节标题</h2>
 <p>这里开始写正文内容，支持标准 Markdown 语法。</p>
 <h3 id="_2">代码块示例</h3>
-<div class="codehilite"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">Seurat</span><span class="p">)</span>
-<span class="n">obj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">CreateSeuratObject</span><span class="p">(</span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="p">)</span>
-<span class="n">obj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">NormalizeData</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-r">library(Seurat)
+obj &lt;- CreateSeuratObject(counts = mat)
+obj &lt;- NormalizeData(obj)
+</code></pre>
 
 <h3 id="_3">图片示例</h3>
 <p>如果需要插入图片，先把图片放到 <code>assets/img/tutorials/</code> 目录下，然后这样引用：</p>

@@ -108,26 +108,26 @@
 <hr />
 <h2 id="markdown">📄 给你一份可以直接复制使用的 Markdown 模板</h2>
 <p>保存为 <code>tutorials-src/_template.md</code>（文件名前面加下划线，脚本会跳过它，不会被当成正式教程发布——如果你想要这个功能我可以在脚本里加一行过滤逻辑，见下文）：</p>
-<div class="codehilite"><pre><span></span><code>---
+<pre class="codehilite"><code class="language-markdown">---
 title: &quot;Ep.XX — 这里写标题&quot;
 date: 2025-11-20
 summary: &quot;这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。&quot;
 type: tutorial
 tags: [&quot;R&quot;, &quot;Seurat&quot;, &quot;标签3&quot;]
-<span class="gu">cover: &quot;&quot;</span>
-<span class="gu">---</span>
+cover: &quot;&quot;
+---
 
-<span class="gu">## 小节标题</span>
+## 小节标题
 
 这里开始写正文内容，支持标准 Markdown 语法。
 
-<span class="gu">### 代码块示例</span>
+### 代码块示例
 
 ```r
 library(Seurat)
 obj &lt;- CreateSeuratObject(counts = mat)
 obj &lt;- NormalizeData(obj)
-</code></pre></div>
+</code></pre>
 
 <h3 id="_2">图片示例</h3>
 <p>如果需要插入图片，先把图片放到 <code>assets/img/tutorials/</code> 目录下，然后这样引用：</p>
@@ -158,7 +158,7 @@ obj &lt;- NormalizeData(obj)
 <li>子要点</li>
 </ul>
 <p>正文可以随意写多个二级/三级标题、代码块、图片、表格、加粗 <strong>重点内容</strong>、行内代码 <code>like_this()</code>，Markdown 语法都会被正确渲染成 HTML。</p>
-<div class="codehilite"><pre><span></span><code>---
+<pre class="codehilite"><code>---
 
 ## 📝 字段说明（每次新建教程时需要填的内容）
 
@@ -171,7 +171,7 @@ type: tutorial               # 必填。目前只有两种取值：tutorial（�
 tags: [&quot;R&quot;, &quot;Seurat&quot;]         # 可选，默认为空数组 []。会渲染成页面顶部和卡片上的标签
 cover: &quot;&quot;                     # 可选，默认空字符串。如果以后想给卡片配封面图，填相对路径，例如 &quot;assets/img/tutorials/ep02-cover.png&quot;
 ---
-</code></pre></div>
+</code></pre>
 
 <hr />
 <h2 id="_5">🚀 新增一篇教程的完整操作流程</h2>
@@ -214,10 +214,10 @@ cover: &quot;&quot;                     # 可选，默认空字符串。如果�
 <hr />
 <h2 id="_">🔧 一个小优化：自动跳过 <code>_</code> 开头的模板文件</h2>
 <p>如果你想把 <code>_template.md</code> 放在 <code>tutorials-src/</code> 里当模板长期保留、但不被脚本误当成正式教程发布，只需要在 <code>build_all_tutorials()</code> 里加一行过滤：</p>
-<div class="codehilite"><pre><span></span><code>    <span class="n">md_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">TUTORIALS_SRC_DIR</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.md&quot;</span><span class="p">))</span>
-    <span class="c1"># 跳过以下划线开头的文件（约定作为模板/草稿，不参与发布）</span>
-    <span class="n">md_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">md_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)]</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">    md_files = sorted(TUTORIALS_SRC_DIR.glob(&quot;*.md&quot;))
+    # 跳过以下划线开头的文件（约定作为模板/草稿，不参与发布）
+    md_files = [f for f in md_files if not f.stem.startswith(&quot;_&quot;)]
+</code></pre>
 
 <p>把这一行加在原脚本 <code>build_all_tutorials()</code> 函数里 <code>md_files = sorted(...)</code> 那一行的正下方即可，其他都不用动。</p>
 <hr />
