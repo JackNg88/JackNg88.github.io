@@ -75,6 +75,9 @@
     <div class="gal-tab" data-filter-key="source" data-filter-val="drive" onclick="setSourceFilter('drive', this)">
       ☁️ Google Drive <span class="gal-tab-count" id="count-source-drive"></span>
     </div>
+    <div class="gal-tab" data-filter-key="source" data-filter-val="youtube" onclick="setSourceFilter('youtube', this)">
+      ▶️ YouTube <span class="gal-tab-count" id="count-source-youtube"></span>
+    </div>
   </div>
 
   <div class="gal-grid" id="galGrid"></div>
@@ -147,9 +150,10 @@
     document.getElementById('count-type-all').textContent   = counts.all;
     document.getElementById('count-type-photo').textContent = counts.photo;
     document.getElementById('count-type-video').textContent = counts.video;
-    document.getElementById('count-source-all').textContent   = counts.all;
-    document.getElementById('count-source-local').textContent = counts.local;
-    document.getElementById('count-source-drive').textContent = counts.drive;
+    document.getElementById('count-source-all').textContent     = counts.all;
+    document.getElementById('count-source-local').textContent   = counts.local   || 0;
+    document.getElementById('count-source-drive').textContent   = counts.drive   || 0;
+    document.getElementById('count-source-youtube').textContent = counts.youtube || 0;
   })();
 
   renderGallery('galGrid', galleryData, currentFilters);

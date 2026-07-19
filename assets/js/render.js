@@ -157,22 +157,57 @@ function renderTutorials(containerId, data, options = {}){
 }
 
 /* ============================================================
-   6. Gallery — 支持 type（photo/video）+ source（local/drive）
-      双重筛选，并提供数量统计辅助函数
+   6. Gallery — 支持 type（photo/video）+ source（local/drive/youtube）
+      多重筛选，并提供数量统计辅助函数
+   ------------------------------------------------------------
+   修复说明（相对旧版）：
+   ① getGalleryCounts()：不再硬编码 local/drive 两个 key，
+      改为动态扫描 data 里出现过的所有 source 值自动统计。
+      以后新增任何 source（如 "vimeo"/"x"），这里都不需要再改。
+   ② renderGallery() 徽章逻辑：从"二选一三元表达式"改为
+      GALLERY_SOURCE_BADGE_MAP 查表，支持任意数量的 source 分类。
+   ③ openLightbox()：核心修复点。原逻辑只对 source==='drive'
+      的视频使用 <iframe>，其余视频一律走 <video src=...> 标签，
+      导致 YouTube 这类"embed 网页型"视频源无法播放（<video>
+      标签只能解析真实的媒体文件如 .mp4，不能解析网页 embed 链接）。
+      现在改为：只要是"iframe 类视频源"（drive / youtube 等），
+      统一用 <iframe>；只有真正的本地媒体文件（source === 'local'
+      且是 .mp4 等直链）才用 <video> 标签。
 ============================================================ */
 
-/* 统计各分类的数量，供 Tab 徽章显示 */
+/* 统计各分类的数量，供 Tab 徽章显示
+   —— 动态版本：自动适配 galleryData 里出现过的任意 source 值 */
 function getGalleryCounts(data){
-  return {
+  const counts = {
     all:   data.length,
     photo: data.filter(g => g.type === 'photo').length,
-    video: data.filter(g => g.type === 'video').length,
-    local: data.filter(g => g.source === 'local').length,
-    drive: data.filter(g => g.source === 'drive').length
+    video: data.filter(g => g.type === 'video').length
   };
+
+  // 动态扫描所有出现过的 source 值（local / drive / youtube / 未来任意新增）
+  const sourceKeys = [...new Set(data.map(g => g.source))];
+  sourceKeys.forEach(key => {
+    counts[key] = data.filter(g => g.source === key).length;
+  });
+
+  return counts;
 }
 
-/* 渲染 Gallery 列表；filters = {type:'all'|'photo'|'video', source:'all'|'local'|'drive'} */
+/* Source 徽章的展示映射表：图标 + 文案
+   新增 source 类型时，只需要在这里加一行，
+   renderGallery() 和 openLightbox() 都不需要再改 */
+const GALLERY_SOURCE_BADGE_MAP = {
+  local:   { label: '💾 Local' },
+  drive:   { label: '☁️ Drive' },
+  youtube: { label: '▶️ YouTube' }
+};
+
+/* 判断某个视频 item 是否需要用 <iframe> 播放
+   （凡是"embed 网页型"视频源都属于此类，与 source 类型解耦，
+    以后加 vimeo/bilibili 等，只需要把对应 source 加进这个数组） */
+const IFRAME_VIDEO_SOURCES = ['drive', 'youtube'];
+
+/* 渲染 Gallery 列表；filters = {type:'all'|'photo'|'video', source:'all'|'local'|'drive'|'youtube'} */
 function renderGallery(containerId, data, filters = {type:'all', source:'all'}){
   const el = document.getElementById(containerId);
   if(!el) return;
@@ -193,15 +228,20 @@ function renderGallery(containerId, data, filters = {type:'all', source:'all'}){
     return;
   }
 
-  el.innerHTML = list.map((g, i) => `
+  el.innerHTML = list.map((g, i) => {
+    // 徽章查表，找不到则给一个兜底文案（避免未来漏配置时页面报错/空白）
+    const badge = GALLERY_SOURCE_BADGE_MAP[g.source] || { label: g.source };
+
+    return `
     <div class="gal-item" onclick="openLightboxByIndex(${i})">
       ${g.type === 'video'
         ? `<img src="${g.thumb}" alt="${g.caption || ''}"><div class="gal-play">▶</div>`
         : `<img src="${g.src}" alt="${g.caption || ''}">`}
-      <span class="gal-source-badge">${g.source === 'drive' ? '☁️ Drive' : '💾 Local'}</span>
+      <span class="gal-source-badge">${badge.label}</span>
       <div class="gal-caption">${g.caption || ''}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   window.__currentGalleryList = list;
 }
@@ -211,13 +251,16 @@ function openLightboxByIndex(idx){
   if(item) openLightbox(item);
 }
 
+/* 核心修复：判断视频用 <iframe> 还是 <video> 标签
+   - IFRAME_VIDEO_SOURCES 里的 source（drive / youtube）→ <iframe>
+   - 其余（例如 source==='local' 且直接存的是 .mp4 文件）→ <video> 标签 */
 function openLightbox(item){
   const lb = document.getElementById('lightbox');
   const body = document.getElementById('lightboxBody');
   if(!lb || !body) return;
 
-  if(item.type === 'video' && item.source === 'drive'){
-    body.innerHTML = `<iframe src="${item.src}" width="800" height="480" allow="autoplay" frameborder="0"></iframe>`;
+  if(item.type === 'video' && IFRAME_VIDEO_SOURCES.includes(item.source)){
+    body.innerHTML = `<iframe src="${item.src}" width="800" height="480" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen frameborder="0"></iframe>`;
   } else if(item.type === 'video'){
     body.innerHTML = `<video src="${item.src}" controls autoplay></video>`;
   } else {
