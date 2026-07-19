@@ -3,6 +3,15 @@
 
 const tutorialsData = [
   {
+    date: "2026-07-19",
+    title: "logo 素材",
+    summary: "整理 Jian Wu / jwtools 品牌 logo 的全部产出版本，涵盖横排字标、方形字标、竖版组合三大系列及各场合适配尺寸（GitHub、社交媒体、PPT、邮件签名等）。",
+    url: "tutorials/52_logo\u7d20\u6750.html",
+    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
+    type: "tutorial",
+    tags: ["Jian Wu", "jwtools", "R", "Seurat", "标签3"]
+  },
+  {
     date: "2026-07-18",
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
     summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
