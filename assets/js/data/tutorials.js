@@ -16,7 +16,7 @@ const tutorialsData = [
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
     summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
     url: "tutorials/4_\u79d1\u7814 AI \u63d0\u793a\u8bcd\u5e93.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
+    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo2.png",
     type: "tutorial",
     tags: ["Jian Wu", "jwtools", "AI提示词", "科研效率", "代码调试"]
   },
