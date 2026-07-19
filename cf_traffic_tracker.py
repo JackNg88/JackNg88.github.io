@@ -84,11 +84,6 @@ def fetch_daily_data(api_token: str, account_id: str, site_tag: str,
     if payload.get("errors"):
         raise RuntimeError(f"Cloudflare GraphQL 返回错误: {payload['errors']}")
 
-    if os.environ.get("CF_DEBUG"):
-        print("=== RAW GraphQL RESPONSE ===")
-        print(json.dumps(payload, indent=2, ensure_ascii=False))
-        print("=============================")
-
     accounts = payload["data"]["viewer"]["accounts"]
     if not accounts:
         raise RuntimeError("未查询到该 accountTag 下的数据，请检查 --account-id 是否正确、"
