@@ -70,104 +70,104 @@
 <p>看你现有的几条提示词，核心模式是：<strong>"续写完整代码 + 参考框架迁移 + 详细注释 + 补充某类详情"</strong>。这是非常典型的"大型多Section流程化脚本迭代开发"场景。我按你的实际工作流（R/Seurat单细胞 + 转座子分析 + 图表生成 + 论文写作）帮你扩展一套更系统的提示词库，可以直接追加到你的 <code>.sh</code> 文件里。</p>
 <hr />
 <h2 id="_2">📌 分类一：代码续写 / 完整版（你已有，补充变体）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 续写类 =====
-完整代码? 从最开始处, 加上详细备注信息
-剩下的, 完整版?
-接下来的, 完整版? 从Section XX开始
-中间省略的部分, 请补全, 不要用注释代替代码
-这一段被截断了, 请从断点处继续, 不要重复已给出的内容
-完整代码, 但只给我修改的Section, 其余用 [代码与上一轮一致] 标注
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 续写类 =====</span>
+完整代码?<span class="w"> </span>从最开始处,<span class="w"> </span>加上详细备注信息
+剩下的,<span class="w"> </span>完整版?
+接下来的,<span class="w"> </span>完整版?<span class="w"> </span>从Section<span class="w"> </span>XX开始
+中间省略的部分,<span class="w"> </span>请补全,<span class="w"> </span>不要用注释代替代码
+这一段被截断了,<span class="w"> </span>请从断点处继续,<span class="w"> </span>不要重复已给出的内容
+完整代码,<span class="w"> </span>但只给我修改的Section,<span class="w"> </span>其余用<span class="w"> </span><span class="o">[</span>代码与上一轮一致<span class="o">]</span><span class="w"> </span>标注
+</code></pre></div>
 
 <h2 id="_3">📌 分类二：代码迁移 / 框架复用（你已有，补充变体）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 迁移类 =====
-参考 [X] 版本框架, 完整迁移到 [Y] 场景, 保留原有的详细注释风格
-我的旧版 []; 但现在完全参考这重写 []
-这个函数/Section在新场景下, 生物学假设是否仍然成立? 若不成立, 应该怎么改?
-把 Myeloid 单一谱系的方法学, 迁移到 10个细胞类型的场景, 哪些Section需要重新设计逻辑(而非简单替换变量名)?
-保持函数签名不变, 只替换内部的细胞类型判断逻辑
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 迁移类 =====</span>
+参考<span class="w"> </span><span class="o">[</span>X<span class="o">]</span><span class="w"> </span>版本框架,<span class="w"> </span>完整迁移到<span class="w"> </span><span class="o">[</span>Y<span class="o">]</span><span class="w"> </span>场景,<span class="w"> </span>保留原有的详细注释风格
+我的旧版<span class="w"> </span><span class="o">[]</span><span class="p">;</span><span class="w"> </span>但现在完全参考这重写<span class="w"> </span><span class="o">[]</span>
+这个函数/Section在新场景下,<span class="w"> </span>生物学假设是否仍然成立?<span class="w"> </span>若不成立,<span class="w"> </span>应该怎么改?
+把<span class="w"> </span>Myeloid<span class="w"> </span>单一谱系的方法学,<span class="w"> </span>迁移到<span class="w"> </span>10个细胞类型的场景,<span class="w"> </span>哪些Section需要重新设计逻辑<span class="o">(</span>而非简单替换变量名<span class="o">)</span>?
+保持函数签名不变,<span class="w"> </span>只替换内部的细胞类型判断逻辑
+</code></pre></div>
 
 <h2 id="_4">📌 分类三：代码调试 / 报错修复（你目前较少，建议补充）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 调试类 =====
-报错信息如下: [粘贴报错], 请定位具体是哪一行/哪个函数导致的, 并给出修复后的完整函数
-这段代码逻辑上没问题, 但结果不符合预期(应该是XX, 实际是YY), 请帮我诊断可能的原因
-帮我加一段诊断代码, 在跑正式流程前先检查 [某个前提条件, 如样本量/年龄跨度] 是否满足
-这个函数在小数据集上正常, 但在27万细胞规模下报错/卡住/内存溢出, 如何优化?
-这里为什么要用 unname()/GetAssayData(layer=...)? Seurat v5和v4的API差异是什么?
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 调试类 =====</span>
+报错信息如下:<span class="w"> </span><span class="o">[</span>粘贴报错<span class="o">]</span>,<span class="w"> </span>请定位具体是哪一行/哪个函数导致的,<span class="w"> </span>并给出修复后的完整函数
+这段代码逻辑上没问题,<span class="w"> </span>但结果不符合预期<span class="o">(</span>应该是XX,<span class="w"> </span>实际是YY<span class="o">)</span>,<span class="w"> </span>请帮我诊断可能的原因
+帮我加一段诊断代码,<span class="w"> </span>在跑正式流程前先检查<span class="w"> </span><span class="o">[</span>某个前提条件,<span class="w"> </span>如样本量/年龄跨度<span class="o">]</span><span class="w"> </span>是否满足
+这个函数在小数据集上正常,<span class="w"> </span>但在27万细胞规模下报错/卡住/内存溢出,<span class="w"> </span>如何优化?
+这里为什么要用<span class="w"> </span>unname<span class="o">()</span>/GetAssayData<span class="o">(</span><span class="nv">layer</span><span class="o">=</span>...<span class="o">)</span>?<span class="w"> </span>Seurat<span class="w"> </span>v5和v4的API差异是什么?
+</code></pre></div>
 
 <h2 id="_5">📌 分类四：代码优化 / 重构（建议新增）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 优化类 =====
-这段代码能否向量化以提升速度? 目前是for循环逐个celltype处理
-这几个函数有重复逻辑, 能否抽象成一个通用函数, 用参数控制差异?
-内存优化: 这一步是否需要先释放某些大对象(如scale.data/counts矩阵)再继续?
-这个Section的输出文件命名不够规范, 帮我统一成 [数字前缀]_[FigureID]_[内容]_[转座子].csv 的格式
-帮我加上运行时间统计(tictoc或Sys.time()), 定位哪个Section最耗时
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 优化类 =====</span>
+这段代码能否向量化以提升速度?<span class="w"> </span>目前是for循环逐个celltype处理
+这几个函数有重复逻辑,<span class="w"> </span>能否抽象成一个通用函数,<span class="w"> </span>用参数控制差异?
+内存优化:<span class="w"> </span>这一步是否需要先释放某些大对象<span class="o">(</span>如scale.data/counts矩阵<span class="o">)</span>再继续?
+这个Section的输出文件命名不够规范,<span class="w"> </span>帮我统一成<span class="w"> </span><span class="o">[</span>数字前缀<span class="o">]</span>_<span class="o">[</span>FigureID<span class="o">]</span>_<span class="o">[</span>内容<span class="o">]</span>_<span class="o">[</span>转座子<span class="o">]</span>.csv<span class="w"> </span>的格式
+帮我加上运行时间统计<span class="o">(</span>tictoc或Sys.time<span class="o">())</span>,<span class="w"> </span>定位哪个Section最耗时
+</code></pre></div>
 
 <h2 id="dotplotheatmap">📌 分类五：可视化 / 绘图规范类（你之前问过dotplot/heatmap，可固化成模板）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 绘图类 =====
-完全参考paper的[X]图风格, 但把数据换成我的; 图例/配色/坐标轴标签需要说明理由
-gene用绿色, TE用紫色; 同一个cell type的feature用虚线圈出来; 左边加cell type标签框
-这个图对于[N]个feature/celltype来说太拥挤了, 帮我设计一个可读性更好的替代方案(如分面/分页/Top N筛选)
-根据生成的图, 帮我判断哪几个TE/celltype的结果不可靠(样本量太小/趋势不一致), 应该标注还是剔除?
-这张图要放进论文Figure2, 请按Nature/Cell风格的图注(figure legend)格式帮我写一段
-raster.dpi保持默认值, 不要用我之前设的全局变量
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 绘图类 =====</span>
+完全参考paper的<span class="o">[</span>X<span class="o">]</span>图风格,<span class="w"> </span>但把数据换成我的<span class="p">;</span><span class="w"> </span>图例/配色/坐标轴标签需要说明理由
+gene用绿色,<span class="w"> </span>TE用紫色<span class="p">;</span><span class="w"> </span>同一个cell<span class="w"> </span>type的feature用虚线圈出来<span class="p">;</span><span class="w"> </span>左边加cell<span class="w"> </span>type标签框
+这个图对于<span class="o">[</span>N<span class="o">]</span>个feature/celltype来说太拥挤了,<span class="w"> </span>帮我设计一个可读性更好的替代方案<span class="o">(</span>如分面/分页/Top<span class="w"> </span>N筛选<span class="o">)</span>
+根据生成的图,<span class="w"> </span>帮我判断哪几个TE/celltype的结果不可靠<span class="o">(</span>样本量太小/趋势不一致<span class="o">)</span>,<span class="w"> </span>应该标注还是剔除?
+这张图要放进论文Figure2,<span class="w"> </span>请按Nature/Cell风格的图注<span class="o">(</span>figure<span class="w"> </span>legend<span class="o">)</span>格式帮我写一段
+raster.dpi保持默认值,<span class="w"> </span>不要用我之前设的全局变量
+</code></pre></div>
 
 <h2 id="_6">📌 分类六：生物学机制解读 / 假说构建（你的核心研究需求）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 机制解读类 =====
-这个结果(如ERV burden在O/Y显著升高)在衰老/TE去抑制机制上, 可能对应哪些已知通路(cGAS-STING/KRAB-ZNF/SASP)?
-这几个转座子家族(给出家族名单)在文献中是否有已知的顺式调控/免疫激活功能?
-帮我设计一个实验/分析, 用于验证&quot;TRIM28/SETDB1下降 → ERV解除抑制&quot;这一假说的因果性(而非仅相关性)
-这个跨cell type一致性结果, 支持&quot;系统性衰老&quot;还是&quot;细胞类型特异性衰老&quot;? 论证逻辑是什么?
-这个发现和IPF/COVID-19/PH中ERV激活的报道相比, 有什么共性和特异性?
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 机制解读类 =====</span>
+这个结果<span class="o">(</span>如ERV<span class="w"> </span>burden在O/Y显著升高<span class="o">)</span>在衰老/TE去抑制机制上,<span class="w"> </span>可能对应哪些已知通路<span class="o">(</span>cGAS-STING/KRAB-ZNF/SASP<span class="o">)</span>?
+这几个转座子家族<span class="o">(</span>给出家族名单<span class="o">)</span>在文献中是否有已知的顺式调控/免疫激活功能?
+帮我设计一个实验/分析,<span class="w"> </span>用于验证<span class="s2">&quot;TRIM28/SETDB1下降 → ERV解除抑制&quot;</span>这一假说的因果性<span class="o">(</span>而非仅相关性<span class="o">)</span>
+这个跨cell<span class="w"> </span>type一致性结果,<span class="w"> </span>支持<span class="s2">&quot;系统性衰老&quot;</span>还是<span class="s2">&quot;细胞类型特异性衰老&quot;</span>?<span class="w"> </span>论证逻辑是什么?
+这个发现和IPF/COVID-19/PH中ERV激活的报道相比,<span class="w"> </span>有什么共性和特异性?
+</code></pre></div>
 
 <h2 id="_7">📌 分类七：论文写作 / 结果汇报（英文模板，你之前也用过）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 论文写作类 =====
-把这段分析结果, 写成一段Methods, 参照Nature Genetics格式, 突出统计学方法选择的理由
-把这几个图的结果, 整合写一段Results, 逻辑上从&quot;是什么&quot;到&quot;为什么&quot;到&quot;意味着什么&quot;
-这个方法学替代(如GAM替代Slingshot)的理由, 帮我写一段Reviewer可能会问的Q&amp;A预演
-用一句话总结这个Figure的核心发现, 作为摘要/graphical abstract的候选文字
-这几个候选转座子, 如果要写进Discussion的&quot;局限性&quot;部分, 应该如何措辞更严谨(避免过度解读)?
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 论文写作类 =====</span>
+把这段分析结果,<span class="w"> </span>写成一段Methods,<span class="w"> </span>参照Nature<span class="w"> </span>Genetics格式,<span class="w"> </span>突出统计学方法选择的理由
+把这几个图的结果,<span class="w"> </span>整合写一段Results,<span class="w"> </span>逻辑上从<span class="s2">&quot;是什么&quot;</span>到<span class="s2">&quot;为什么&quot;</span>到<span class="s2">&quot;意味着什么&quot;</span>
+这个方法学替代<span class="o">(</span>如GAM替代Slingshot<span class="o">)</span>的理由,<span class="w"> </span>帮我写一段Reviewer可能会问的Q<span class="p">&amp;</span>A预演
+用一句话总结这个Figure的核心发现,<span class="w"> </span>作为摘要/graphical<span class="w"> </span>abstract的候选文字
+这几个候选转座子,<span class="w"> </span>如果要写进Discussion的<span class="s2">&quot;局限性&quot;</span>部分,<span class="w"> </span>应该如何措辞更严谨<span class="o">(</span>避免过度解读<span class="o">)</span>?
+</code></pre></div>
 
 <h2 id="qc">📌 分类八：数据诊断 / QC（大规模单细胞数据的常见痛点）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 数据诊断类 =====
-帮我写一段诊断代码, 检查每个celltype x AgeGroup组合的样本量分布, 标出&lt;4的组合
-这一步为什么结果是NULL/空? 帮我拆解每个过滤条件, 分别打印通过/未通过的数量
-这个GAM/KW检验的显著结果数量异常少, 帮我诊断是&quot;统计不显著&quot;还是&quot;单调性/一致性条件&quot;卡住了
-帮我检查这个基因/TE名称在assay中是否存在, 若不存在, 可能的原因(命名不一致/大小写/版本差异)是什么?
-这批样本的年龄分布是否足够支撑 s(age, k=4) 的样条自由度? 帮我打印每个Lineage的unique age数量
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 数据诊断类 =====</span>
+帮我写一段诊断代码,<span class="w"> </span>检查每个celltype<span class="w"> </span>x<span class="w"> </span>AgeGroup组合的样本量分布,<span class="w"> </span>标出&lt;4的组合
+这一步为什么结果是NULL/空?<span class="w"> </span>帮我拆解每个过滤条件,<span class="w"> </span>分别打印通过/未通过的数量
+这个GAM/KW检验的显著结果数量异常少,<span class="w"> </span>帮我诊断是<span class="s2">&quot;统计不显著&quot;</span>还是<span class="s2">&quot;单调性/一致性条件&quot;</span>卡住了
+帮我检查这个基因/TE名称在assay中是否存在,<span class="w"> </span>若不存在,<span class="w"> </span>可能的原因<span class="o">(</span>命名不一致/大小写/版本差异<span class="o">)</span>是什么?
+这批样本的年龄分布是否足够支撑<span class="w"> </span>s<span class="o">(</span>age,<span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="m">4</span><span class="o">)</span><span class="w"> </span>的样条自由度?<span class="w"> </span>帮我打印每个Lineage的unique<span class="w"> </span>age数量
+</code></pre></div>
 
 <h2 id="gitignore">📌 分类九：版本管理 / 流程整理（你之前也问过.gitignore/脚本管理）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 版本管理类 =====
-帮我把这个脚本按Section拆分成独立的.R文件, 并生成一个master脚本按顺序source它们
-帮我写一个commit message, 总结这次修改的核心内容(生物学假设变化 + 技术实现变化)
-这个项目的多个子分析(Myeloid/AllCell/Epi)之间, 哪些函数是完全通用的? 帮我抽取成shared_functions.R
-帮我生成一份README, 说明这个脚本的输入/输出/依赖包/运行顺序
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 版本管理类 =====</span>
+帮我把这个脚本按Section拆分成独立的.R文件,<span class="w"> </span>并生成一个master脚本按顺序source它们
+帮我写一个commit<span class="w"> </span>message,<span class="w"> </span>总结这次修改的核心内容<span class="o">(</span>生物学假设变化<span class="w"> </span>+<span class="w"> </span>技术实现变化<span class="o">)</span>
+这个项目的多个子分析<span class="o">(</span>Myeloid/AllCell/Epi<span class="o">)</span>之间,<span class="w"> </span>哪些函数是完全通用的?<span class="w"> </span>帮我抽取成shared_functions.R
+帮我生成一份README,<span class="w"> </span>说明这个脚本的输入/输出/依赖包/运行顺序
+</code></pre></div>
 
 <h2 id="prompt-about-prompts">📌 分类十：元提示词（Prompt about Prompts，帮你更精准地问）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 元提示词类 =====
-在回答前, 先确认你理解的[某个术语/需求]是否和我说的一致, 如有歧义请先反问
-如果这个需求有多种实现方式, 请先列出2-3种方案的优缺点, 我选定后你再写完整代码
-不要假设我要全部重写, 先告诉我具体哪几行/哪个函数需要改动
-这个改动是否会影响其他Section复用的中间对象(如feature_sets/immune.combined的meta.data)? 请先检查依赖关系
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 元提示词类 =====</span>
+在回答前,<span class="w"> </span>先确认你理解的<span class="o">[</span>某个术语/需求<span class="o">]</span>是否和我说的一致,<span class="w"> </span>如有歧义请先反问
+如果这个需求有多种实现方式,<span class="w"> </span>请先列出2-3种方案的优缺点,<span class="w"> </span>我选定后你再写完整代码
+不要假设我要全部重写,<span class="w"> </span>先告诉我具体哪几行/哪个函数需要改动
+这个改动是否会影响其他Section复用的中间对象<span class="o">(</span>如feature_sets/immune.combined的meta.data<span class="o">)</span>?<span class="w"> </span>请先检查依赖关系
+</code></pre></div>
 
 <hr />
 <h2 id="_8">🎯 针对你研究方向的专属高频模板（转座子/衰老/多组学整合）</h2>
-<pre class="codehilite"><code class="language-bash"># ===== 领域专属类 =====
-这个TE family在hg38 RepeatMasker注释中的repClass/repFamily是什么? 是否有已知的年龄相关文献?
-帮我设计一个soloTE/scTE的QC步骤, 排除mappability过低导致的假阳性DE-TE
-这个ERV位点是否与eQTL数据库(如GTEx)中的已知调控变异重叠?
-把这个lung aging的发现, 和heart/PH ERVAtlas项目的框架做一次交叉验证的可行性评估
-这几个候选ERV, 是否适合做空间转录组(Spatial IPF-ERV)层面的验证? 需要哪些先验假设?
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ===== 领域专属类 =====</span>
+这个TE<span class="w"> </span>family在hg38<span class="w"> </span>RepeatMasker注释中的repClass/repFamily是什么?<span class="w"> </span>是否有已知的年龄相关文献?
+帮我设计一个soloTE/scTE的QC步骤,<span class="w"> </span>排除mappability过低导致的假阳性DE-TE
+这个ERV位点是否与eQTL数据库<span class="o">(</span>如GTEx<span class="o">)</span>中的已知调控变异重叠?
+把这个lung<span class="w"> </span>aging的发现,<span class="w"> </span>和heart/PH<span class="w"> </span>ERVAtlas项目的框架做一次交叉验证的可行性评估
+这几个候选ERV,<span class="w"> </span>是否适合做空间转录组<span class="o">(</span>Spatial<span class="w"> </span>IPF-ERV<span class="o">)</span>层面的验证?<span class="w"> </span>需要哪些先验假设?
+</code></pre></div>
 
 <hr />
 <h2 id="_9">💡 使用建议</h2>
@@ -191,7 +191,7 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 <h1 id="2-claude">(2) Claude</h1>
 <p>根据您这份文件里已有的提示词风格（简短、直击核心、可复用于代码/图注/数据分析多场景），结合您平时的实际工作流（Seurat单细胞、转座子分析、图表复用、manuscript撰写），我给您整理一份补充清单，按场景分类，风格与您现有的保持一致：</p>
 <h2 id="_10">一、代码类</h2>
-<pre class="codehilite"><code>完整代码？从最开始处，加上详细备注信息
+<div class="codehilite"><pre><span></span><code>完整代码？从最开始处，加上详细备注信息
 
 我的旧版[];但现在完全参考这重写[]
 
@@ -216,10 +216,10 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 这个图的配色/顺序/字体大小，完全按照XX图的风格统一
 
 这段代码在Seurat v5下是否兼容？如果有v4遗留写法，帮我更新
-</code></pre>
+</code></pre></div>
 
 <h2 id="naturemanuscript">二、图注/写作类（Nature风格manuscript）</h2>
-<pre class="codehilite"><code>完全参考这个图注格式重写：[参考文本]
+<div class="codehilite"><pre><span></span><code>完全参考这个图注格式重写：[参考文本]
 
 这段Results，参考这篇文献的写作逻辑和句式，改写成我的数据版本
 
@@ -232,10 +232,10 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 这个title，给我列出7种不同类型的候选（描述型/悬念型/发现型等）
 
 用reviewer的12条checklist标准，帮我审视这段Results有没有逻辑漏洞
-</code></pre>
+</code></pre></div>
 
 <h2 id="workflow">三、生信分析类（专属于您的转座子 workflow）</h2>
-<pre class="codehilite"><code>同理，增加：各个的转座子等详细信息？例如：是哪些TE?
+<div class="codehilite"><pre><span></span><code>同理，增加：各个的转座子等详细信息？例如：是哪些TE?
 
 ---补充---
 
@@ -254,25 +254,25 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 这个GO富集，帮我做一版&quot;至少2个cell type共享的通路&quot;筛选逻辑
 
 这段分析结果，帮我做Y vs M vs O三组两两比较（O/Y, M/Y, O/M）而不只是Y vs O
-</code></pre>
+</code></pre></div>
 
 <h2 id="_11">四、跨脚本迁移/批处理类</h2>
-<pre class="codehilite"><code>参考Myeloid版本框架，完整迁移到所有细胞谱系（Lymphoid/Epithelial/Stromal）
+<div class="codehilite"><pre><span></span><code>参考Myeloid版本框架，完整迁移到所有细胞谱系（Lymphoid/Epithelial/Stromal）
 
 这个for循环，改成purrr::map或sapply的向量化写法，速度更快
 
 这段代码要跑10个基因列表文件，帮我写一个批量处理的wrapper
 
 这份代码目前是硬编码某个celltype，帮我改成for(cell in celltype_list)的通用循环版本
-</code></pre>
+</code></pre></div>
 
 <h2 id="_12">五、审稿/答辩应对类</h2>
-<pre class="codehilite"><code>这个reviewer质疑scTE的3'端偏好性，帮我构建一个多层次rebuttal（技术层面+验证层面+文献支持）
+<div class="codehilite"><pre><span></span><code>这个reviewer质疑scTE的3&#39;端偏好性，帮我构建一个多层次rebuttal（技术层面+验证层面+文献支持）
 
 这段委员会/审稿意见，帮我列出关键质疑点，并逐条对应我已有的分析结果
 
 这个数据，如果被质疑batch effect没控制好，我应该补充哪些验证图？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <p>需要我针对某一类（比如"生信分析类"或"图注写作类"）再进一步细化，或者直接把这些整理成一份可以直接粘贴进您 <code>.sh</code> 文件的完整版清单吗？</p>
@@ -359,7 +359,7 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 <hr />
 <h1 id="1-coding">① Coding（代码）</h1>
 <h2 id="_14">完整重写（你已经有）</h2>
-<pre class="codehilite"><code class="language-text">完全参考我的旧版框架，从头重新编写。
+<div class="codehilite"><pre><span></span><code>完全参考我的旧版框架，从头重新编写。
 
 要求：
 - 不遗漏任何功能
@@ -367,11 +367,11 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 - 增加详细英文注释
 - 提高代码可读性
 - 不允许省略任何代码
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="bug">自动检查Bug</h2>
-<pre class="codehilite"><code class="language-text">请不要直接修改。
+<div class="codehilite"><pre><span></span><code>请不要直接修改。
 
 请先检查整个代码。
 
@@ -383,11 +383,11 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 5. 可读性问题
 
 然后再修改。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="_15">提高运行速度</h2>
-<pre class="codehilite"><code class="language-text">请不要改变任何分析结果。
+<div class="codehilite"><pre><span></span><code>请不要改变任何分析结果。
 
 目标：
 仅优化运行速度。
@@ -396,11 +396,11 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 - for循环
 - 重复计算
 - 内存占用
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="seurat">Seurat优化</h2>
-<pre class="codehilite"><code class="language-text">请检查整个Seurat流程。
+<div class="codehilite"><pre><span></span><code>请检查整个Seurat流程。
 
 重点：
 
@@ -411,11 +411,11 @@ raster.dpi保持默认值, 不要用我之前设的全局变量
 是否存在重复ScaleData？
 
 是否可以减少RAM？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="linux">Linux脚本优化</h2>
-<pre class="codehilite"><code class="language-text">请把整个Shell脚本改成更加稳定版本。
+<div class="codehilite"><pre><span></span><code>请把整个Shell脚本改成更加稳定版本。
 
 要求：
 
@@ -428,12 +428,12 @@ set -euo pipefail
 增加日志输出
 
 增加时间统计
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="2-debug">② Debug</h1>
 <p>这个特别好用。</p>
-<pre class="codehilite"><code class="language-text">不要猜。
+<div class="codehilite"><pre><span></span><code>不要猜。
 
 一步一步分析为什么报错。
 
@@ -446,21 +446,21 @@ set -euo pipefail
 ③ 如何修复
 
 ④ 是否还有隐藏问题
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="log">看Log</h2>
-<pre class="codehilite"><code class="language-text">根据Log定位真正错误。
+<div class="codehilite"><pre><span></span><code>根据Log定位真正错误。
 
 不要只解释最后一句。
 
 分析整个调用过程。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="3-figure">③ Figure（论文画图）</h1>
 <p>这个你以后天天会用。</p>
-<pre class="codehilite"><code class="language-text">请从Nature论文角度评价这张图。
+<div class="codehilite"><pre><span></span><code>请从Nature论文角度评价这张图。
 
 评分：
 
@@ -479,11 +479,11 @@ set -euo pipefail
 是否达到Nature标准
 
 最后给修改建议。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="figure">修改Figure</h2>
-<pre class="codehilite"><code class="language-text">保持所有数据不变。
+<div class="codehilite"><pre><span></span><code>保持所有数据不变。
 
 仅优化：
 
@@ -498,25 +498,25 @@ Label
 Spacing
 
 Panel顺序
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="figure_1">Figure逻辑</h2>
-<pre class="codehilite"><code class="language-text">请重新设计Figure Story。
+<div class="codehilite"><pre><span></span><code>请重新设计Figure Story。
 
 目标：
 
 Figure之间具有故事线。
 
 每张Figure回答一个科学问题。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="4-paper-writing">④ Paper Writing</h1>
 <p>这是你最需要的。</p>
 <hr />
 <h2 id="sci">SCI润色</h2>
-<pre class="codehilite"><code class="language-text">不要改变科学意思。
+<div class="codehilite"><pre><span></span><code>不要改变科学意思。
 
 按照Nature Cell格式润色。
 
@@ -529,11 +529,11 @@ Figure之间具有故事线。
 学术性
 
 不要增加没有证据的话。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="results">Results</h2>
-<pre class="codehilite"><code class="language-text">按照Nature Results写法。
+<div class="codehilite"><pre><span></span><code>按照Nature Results写法。
 
 要求：
 
@@ -544,11 +544,11 @@ Figure之间具有故事线。
 第三句引用Figure
 
 第四句总结意义
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="discussion">Discussion</h2>
-<pre class="codehilite"><code class="language-text">不要重复Results。
+<div class="codehilite"><pre><span></span><code>不要重复Results。
 
 重点：
 
@@ -559,11 +559,11 @@ Figure之间具有故事线。
 未来意义？
 
 局限性？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="5-reviewer">⑤ Reviewer模式（超级推荐）</h1>
-<pre class="codehilite"><code class="language-text">假设你是Nature Reviewer。
+<div class="codehilite"><pre><span></span><code>假设你是Nature Reviewer。
 
 请找出：
 
@@ -578,33 +578,33 @@ Figure之间具有故事线。
 所有实验不足
 
 越严格越好。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="editor">Editor模式</h2>
-<pre class="codehilite"><code class="language-text">假设你是Nature Editor。
+<div class="codehilite"><pre><span></span><code>假设你是Nature Editor。
 
 你会拒稿吗？
 
 为什么？
 
 需要补哪些内容？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="6-research">⑥ Research（科研设计）</h1>
-<pre class="codehilite"><code class="language-text">根据目前结果。
+<div class="codehilite"><pre><span></span><code>根据目前结果。
 
 提出：
 
 5个新的Hypothesis
 
 按照创新性排序。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="_16">下一步实验</h2>
-<pre class="codehilite"><code class="language-text">如果你是PI。
+<div class="codehilite"><pre><span></span><code>如果你是PI。
 
 下一步会做哪些实验？
 
@@ -617,11 +617,11 @@ Figure之间具有故事线。
 可选
 
 三个等级。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="7">⑦ 单细胞分析（你应该建立）</h1>
-<pre class="codehilite"><code class="language-text">检查整个单细胞分析流程。
+<div class="codehilite"><pre><span></span><code>检查整个单细胞分析流程。
 
 包括：
 
@@ -644,11 +644,11 @@ Cell-cell
 Scoring
 
 是否符合目前最佳实践？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h2 id="te">TE分析</h2>
-<pre class="codehilite"><code class="language-text">假设你是TE领域专家。
+<div class="codehilite"><pre><span></span><code>假设你是TE领域专家。
 
 评价整个TE分析。
 
@@ -669,11 +669,11 @@ Family
 Subfamily
 
 Locus-level分析？
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="8-website">⑧ Website</h1>
-<pre class="codehilite"><code class="language-text">请从PI招聘学生角度评价我的主页。
+<div class="codehilite"><pre><span></span><code>请从PI招聘学生角度评价我的主页。
 
 评分：
 
@@ -688,11 +688,11 @@ Locus-level分析？
 第一印象
 
 最后提出修改建议。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="9">⑨ 项目管理</h1>
-<pre class="codehilite"><code class="language-text">根据整个项目。
+<div class="codehilite"><pre><span></span><code>根据整个项目。
 
 列出：
 
@@ -703,12 +703,12 @@ Locus-level分析？
 以后完成
 
 按照优先级排序。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="10-prompt">⑩ Prompt（我最推荐建立）</h1>
 <p>以后可以直接要求AI：</p>
-<pre class="codehilite"><code class="language-text">请先思考，再回答。
+<div class="codehilite"><pre><span></span><code>请先思考，再回答。
 
 不要急着输出。
 
@@ -717,7 +717,7 @@ Locus-level分析？
 如果有多种方案，请全部列出来并比较。
 
 最后推荐最佳方案，并解释原因。
-</code></pre>
+</code></pre></div>
 
 <hr />
 <h1 id="11-prompt">⑪ 针对你最值得收藏的几个 Prompt</h1>
