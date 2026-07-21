@@ -299,5 +299,25 @@
 </script>
 <!-- End Cloudflare Web Analytics -->
 
+<!-- Cloudflare Web Analytics (admin self-skip via ?jw_skip=1) -->
+<script>
+(function () {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('jw_skip') === '1') {
+      window.localStorage.setItem('jw_admin_skip_analytics', '1');
+    }
+    if (window.localStorage && window.localStorage.getItem('jw_admin_skip_analytics') === '1') {
+      return; // 管理员自用设备，跳过上报
+    }
+  } catch (e) {}
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token": "ccb5353e9ca04cfcaab486784d4870ff"}');
+  document.head.appendChild(s);
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
