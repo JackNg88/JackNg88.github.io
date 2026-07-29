@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illumina BaseSpace: scRNA-seq Analysis with the DRAGEN Pipeline | Jian Wu — Lung Cell Atlas Research</title>
+<meta name="description" content="介绍如何在 Illumina BaseSpace 平台上使用 DRAGEN Single Cell RNA 流程分析 scRNA-seq 数据，涵盖账号注册、CLI 安装配置，以及项目文件的上传下载操作。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../assets/img/logos/Jian_Wu_icon-only.png">
+<link rel="apple-touch-icon" href="../assets/img/logos/Jian_Wu_icon-only.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<!-- Code syntax highlighting (client-side, no build step needed) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../assets/img/logos/Jian_Wu_icon-only.png" alt="Jian Wu" class="brand-icon-img">
+      <span class="nav-brand-text">
+        <span class="nav-brand-title">JIAN WU</span>
+        <span class="nav-brand-sub">Lung Cell Atlas Research</span>
+      </span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html">Home</a>
+      <div class="nav-drop">
+        <button>Research ▾</button>
+        <div class="nav-drop-menu">
+          <a href="../experience.html">Experience</a>
+          <a href="../publications.html">Publications</a>
+          <a href="../conferences.html">Conferences</a>
+        </div>
+      </div>
+      <a href="../expertise.html">Expertise</a>
+      <a href="../tutorials.html" class="active">Tutorials</a>
+      <a href="../news.html">News</a>
+      <a href="../gallery.html">Gallery</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="nav-tools">
+      <button onclick="toggleDark()" title="Dark mode">🌙</button>
+      <button class="nav-burger" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="full-wrap">
+  <div class="page-header">
+    <h1>Illumina BaseSpace: scRNA-seq Analysis with the DRAGEN Pipeline</h1>
+    <p class="tut-page-date">2026-07-29</p>
+    <div class="tags tut-page-tags">
+      <span class="tag">Jian Wu</span><span class="tag">jwtools</span><span class="tag">Illumina</span><span class="tag">BaseSpace</span><span class="tag">DRAGEN</span><span class="tag">scRNA-seq</span><span class="tag">CLI</span>
+    </div>
+  </div>
+
+  <div class="section tut-article-body">
+    <div>
+
+# Illumina BaseSpace
+
+👤 Analysis by: Vishnu Kumar and Marek Bartkuhn
+
+</div>
+
+<p>::: {#notebook}</p>
+<h1 id="scrna-seq-analysis-using-illumina-dragen-pipelineanchor-link-scrna-seq-analysis-using-illumina-dragen-pipeline">scRNA-seq Analysis Using Illumina DRAGEN Pipeline<a href="#scRNA-seq-Analysis-Using-Illumina-DRAGEN-Pipeline">¶</a>{.anchor-link} {#scRNA-seq-Analysis-Using-Illumina-DRAGEN-Pipeline}</h1>
+<ol>
+<li>Make account on illumina basespace:\
+    <a href="https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register">https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register</a></li>
+<li>Here, we can create different projects. Within a specific project,
+    we can upload files either by drag-and-drop or using the <strong>CLI</strong>.</li>
+<li>To run a specific app, go to the <strong>Apps</strong> tab and type "single
+    cell". This will display the <strong>DRAGEN Single Cell RNA</strong> app. Click
+    on it to open this app, where you can view pipeline information,
+    input file requirements, and other relevant details. Then click
+    <strong>Launch Application</strong>, select the required input files and
+    parameters, and run the analysis.</li>
+</ol>
+<h1 id="install-basespace-sequence-hub-clianchor-link-install-basespace-sequence-hub-cli">Install BaseSpace Sequence Hub CLI<a href="#Install-BaseSpace-Sequence-Hub-CLI">¶</a>{.anchor-link} {#Install-BaseSpace-Sequence-Hub-CLI}</h1>
+<p>documents:
+<a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview">https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview</a>\
+Installation for Linux given below:</p>
+<h2 id="installation-for-linuxanchor-link-installation-for-linux">Installation for Linux<a href="#Installation-for-Linux">¶</a>{.anchor-link} {#Installation-for-Linux}</h2>
+<p>::: highlight
+    # make directory
+:::</p>
+<p>::: highlight
+    $ mkdir -p $HOME/bin
+    $ wget "https://launch.basespace.illumina.com/CLI/latest/amd64-linux/bs" -O $HOME/bin/bs
+:::</p>
+<p>::: highlight
+    # file permissions
+:::</p>
+<p>::: highlight
+    $ chmod u+x $HOME/bin/bs
+:::</p>
+<h2 id="authenticate-to-eu-serveranchor-link-authenticate-to-eu-server">Authenticate to EU server<a href="#Authenticate-to-EU-server">¶</a>{.anchor-link} {#Authenticate-to-EU-server}</h2>
+<p>::: highlight
+    bs auth --api-server https://api.euc1.sh.basespace.illumina.com
+:::</p>
+<p>You will get a URL and paste it into a browser</p>
+<h2 id="inspect-the-tokenanchor-link-inspect-the-token">Inspect the token<a href="#Inspect-the-token">¶</a>{.anchor-link} {#Inspect-the-token}</h2>
+<p>::: highlight
+    $ bs whoami
+:::</p>
+<h2 id="to-configure-the-server-to-euanchor-link-to-configure-the-server-to-eu">To configure the server to EU<a href="#To-configure-the-server-to-EU">¶</a>{.anchor-link} {#To-configure-the-server-to-EU}</h2>
+<p>::: highlight
+    $ eval $(bs load config eu)
+:::</p>
+<p>::: highlight
+    # To get list of projects
+:::</p>
+<p>::: highlight
+    $ bs list projects
+:::</p>
+<p>::: highlight
+    # To get list app session
+:::</p>
+<p>::: highlight
+    $ bs list appsession
+:::</p>
+<h1 id="command-line-referenceanchor-link-command-line-reference">Command-Line Reference<a href="#Command-Line-Reference">¶</a>{.anchor-link} {#Command-Line-Reference}</h1>
+<p><a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-examples#FASTQupload">https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-examples#FASTQupload</a></p>
+<h2 id="upload-and-download-filesanchor-link-upload-and-download-files">Upload and download files<a href="#Upload-and-download-files">¶</a>{.anchor-link} {#Upload-and-download-files}</h2>
+<p>::: highlight
+    # To upload folder /files
+:::</p>
+<p>::: highlight
+    $ bs upload dataset -p <ProjectID> --recursive .
+:::</p>
+<p>::: highlight
+    # To download a complete project
+:::</p>
+<p>::: highlight
+    $ bs download project -i <ProjectID> -o <output>
+:::</p>
+<p>::: highlight
+    # To download specific data
+:::</p>
+<p>::: highlight
+    $ bs download appsession --id <APPSESSION_ID> --output <LOCAL_FOLDER>
+:::
+:::</p>
+<p>::: {#imgModal}
+[×]{#imgModalClose title="Close (ESC)"} <img alt="Enlarged
+figure" src="" />{#imgModalContent}
+:::</p>
+  </div>
+
+  <p style="margin-top:2rem"><a href="../tutorials.html">← Back to all tutorials</a></p>
+</div>
+
+<footer class="site-footer">
+
+  <div class="footer-logos-wrap">
+    <p class="footer-logos-label">Affiliated Institutions &amp; Collaborators</p>
+    <div class="footer-logos-row">
+
+      <a href="../index.html" class="footer-logo-item footer-logo-self" title="Jian Wu">
+        <img src="../assets/img/logos/Jian_Wu_icon-only.png" alt="Jian Wu - Lung Cell Atlas Research">
+      </a>
+
+      <div class="footer-logo-divider"></div>
+
+      <a href="https://www.uni-giessen.de/en" target="_blank" rel="noopener" class="footer-logo-item" title="Justus-Liebig-Universität Gießen">
+        <img src="../assets/img/logos/jlu-giessen.png" alt="Justus-Liebig-Universität Gießen">
+      </a>
+
+      <a href="https://www.mpi-hlr.de/en" target="_blank" rel="noopener" class="footer-logo-item" title="Max Planck Institute for Heart and Lung Research">
+        <img src="../assets/img/logos/mpi-kerckhoff.png" alt="Max Planck Institute for Heart and Lung Research">
+      </a>
+
+      <a href="https://cpi-online.de/" target="_blank" rel="noopener" class="footer-logo-item" title="Cardio-Pulmonary Institute">
+        <img src="../assets/img/logos/cpi.png" alt="Cardio-Pulmonary Institute (CPI)">
+      </a>
+
+      <a href="https://dzl.de/en/" target="_blank" rel="noopener" class="footer-logo-item" title="DZL DataLung School">
+        <img src="../assets/img/logos/dzl-datalung.png" alt="Deutsches Zentrum für Lungenforschung - DataLung School">
+      </a>
+
+      <a href="https://www.imprs-mob.de/" target="_blank" rel="noopener" class="footer-logo-item" title="IMPRS for Molecular Organ Biology">
+        <img src="../assets/img/logos/imprs-mob.png" alt="IMPRS for Molecular Organ Biology">
+      </a>
+
+      <a href="https://ilh-giessen.de/en/" target="_blank" rel="noopener" class="footer-logo-item" title="Institute for Lung Health">
+        <img src="../assets/img/logos/ilh.png" alt="Institute for Lung Health (ILH)">
+      </a>
+
+      <a href="https://www.spullamsettilab.com/index.php" target="_blank" rel="noopener" class="footer-logo-item" title="Pullamsetti Lab">
+        <img src="../assets/img/logos/pullamsetti-lab.png" alt="Pullamsetti Lab - Lung Vascular Epigenetics">
+      </a>
+
+    </div>
+  </div>
+
+  <div class="footer-copyright">
+    © 2025 Jian Wu · CPI / MPI-BN / JLU Gießen / DZL / ILH ·
+    <a href="https://github.com/jianwu-atlas" target="_blank">GitHub</a> ·
+    <a href="https://orcid.org/0000-0003-4720-2374" target="_blank">ORCID</a>
+  </div>
+
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

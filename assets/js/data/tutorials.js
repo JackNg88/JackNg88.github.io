@@ -3,6 +3,15 @@
 
 const tutorialsData = [
   {
+    date: "2026-07-29",
+    title: "Illumina BaseSpace: scRNA-seq Analysis with the DRAGEN Pipeline",
+    summary: "介绍如何在 Illumina BaseSpace 平台上使用 DRAGEN Single Cell RNA 流程分析 scRNA-seq 数据，涵盖账号注册、CLI 安装配置，以及项目文件的上传下载操作。",
+    url: "tutorials/2_2-Illumina BaseSpace.html",
+    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
+    type: "tutorial",
+    tags: ["Jian Wu", "jwtools", "Illumina", "BaseSpace", "DRAGEN", "scRNA-seq", "CLI"]
+  },
+  {
     date: "2026-07-19",
     title: "logo 素材",
     summary: "整理 Jian Wu / jwtools 品牌 logo 的全部产出版本，涵盖横排字标、方形字标、竖版组合三大系列及各场合适配尺寸（GitHub、社交媒体、PPT、邮件签名等）。",
@@ -24,7 +33,7 @@ const tutorialsData = [
     date: "2026-07-17",
     title: "如何把新函数整合成jwtools函数",
     summary: "记录如何将新写的 R 函数按 roxygen2 + testthat 规范整合进 jwtools 包，含依赖声明、文档生成与测试流程。",
-    url: "tutorials/2_\u5982\u4f55\u628a\u65b0\u51fd\u6570\u6574\u5408\u6210jwtools\u51fd\u6570.html",
+    url: "tutorials/2_1-\u5982\u4f55\u628a\u65b0\u51fd\u6570\u6574\u5408\u6210jwtools\u51fd\u6570.html",
     cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_preview.png",
     type: "tutorial",
     tags: ["Jian Wu", "R", "Seurat", "jwtools"]
