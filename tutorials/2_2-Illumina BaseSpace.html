@@ -59,97 +59,57 @@
   </div>
 
   <div class="section tut-article-body">
-    <div>
-
-# Illumina BaseSpace
-
-👤 Analysis by: Vishnu Kumar and Marek Bartkuhn
-
-</div>
-
-<p>::: {#notebook}</p>
-<h1 id="scrna-seq-analysis-using-illumina-dragen-pipelineanchor-link-scrna-seq-analysis-using-illumina-dragen-pipeline">scRNA-seq Analysis Using Illumina DRAGEN Pipeline<a href="#scRNA-seq-Analysis-Using-Illumina-DRAGEN-Pipeline">¶</a>{.anchor-link} {#scRNA-seq-Analysis-Using-Illumina-DRAGEN-Pipeline}</h1>
+    <p>👤 Analysis by: Vishnu Kumar and Marek Bartkuhn</p>
+<h2 id="scrna-seq-analysis-using-illumina-dragen-pipeline">scRNA-seq Analysis Using Illumina DRAGEN Pipeline</h2>
 <ol>
-<li>Make account on illumina basespace:\
-    <a href="https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register">https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register</a></li>
-<li>Here, we can create different projects. Within a specific project,
-    we can upload files either by drag-and-drop or using the <strong>CLI</strong>.</li>
-<li>To run a specific app, go to the <strong>Apps</strong> tab and type "single
-    cell". This will display the <strong>DRAGEN Single Cell RNA</strong> app. Click
-    on it to open this app, where you can view pipeline information,
-    input file requirements, and other relevant details. Then click
-    <strong>Launch Application</strong>, select the required input files and
-    parameters, and run the analysis.</li>
+<li>Make an account on Illumina BaseSpace:
+   <a href="https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register">https://login.illumina.com/platform-services-manager/?rURL=https://basespace.illumina.com&amp;clientId=basespace&amp;clientVars=aHR0cDovL2Jhc2VzcGFjZS5pbGx1bWluYS5jb20vZGFzaGJvYXJk&amp;redirectMethod=GET#/register</a></li>
+<li>Here, we can create different projects. Within a specific project, we can upload files either by drag-and-drop or using the <strong>CLI</strong>.</li>
+<li>To run a specific app, go to the <strong>Apps</strong> tab and type "single cell". This will display the <strong>DRAGEN Single Cell RNA</strong> app. Click on it to open this app, where you can view pipeline information, input file requirements, and other relevant details. Then click <strong>Launch Application</strong>, select the required input files and parameters, and run the analysis.</li>
 </ol>
-<h1 id="install-basespace-sequence-hub-clianchor-link-install-basespace-sequence-hub-cli">Install BaseSpace Sequence Hub CLI<a href="#Install-BaseSpace-Sequence-Hub-CLI">¶</a>{.anchor-link} {#Install-BaseSpace-Sequence-Hub-CLI}</h1>
-<p>documents:
-<a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview">https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview</a>\
-Installation for Linux given below:</p>
-<h2 id="installation-for-linuxanchor-link-installation-for-linux">Installation for Linux<a href="#Installation-for-Linux">¶</a>{.anchor-link} {#Installation-for-Linux}</h2>
-<p>::: highlight
-    # make directory
-:::</p>
-<p>::: highlight
-    $ mkdir -p $HOME/bin
-    $ wget "https://launch.basespace.illumina.com/CLI/latest/amd64-linux/bs" -O $HOME/bin/bs
-:::</p>
-<p>::: highlight
-    # file permissions
-:::</p>
-<p>::: highlight
-    $ chmod u+x $HOME/bin/bs
-:::</p>
-<h2 id="authenticate-to-eu-serveranchor-link-authenticate-to-eu-server">Authenticate to EU server<a href="#Authenticate-to-EU-server">¶</a>{.anchor-link} {#Authenticate-to-EU-server}</h2>
-<p>::: highlight
-    bs auth --api-server https://api.euc1.sh.basespace.illumina.com
-:::</p>
-<p>You will get a URL and paste it into a browser</p>
-<h2 id="inspect-the-tokenanchor-link-inspect-the-token">Inspect the token<a href="#Inspect-the-token">¶</a>{.anchor-link} {#Inspect-the-token}</h2>
-<p>::: highlight
-    $ bs whoami
-:::</p>
-<h2 id="to-configure-the-server-to-euanchor-link-to-configure-the-server-to-eu">To configure the server to EU<a href="#To-configure-the-server-to-EU">¶</a>{.anchor-link} {#To-configure-the-server-to-EU}</h2>
-<p>::: highlight
-    $ eval $(bs load config eu)
-:::</p>
-<p>::: highlight
-    # To get list of projects
-:::</p>
-<p>::: highlight
-    $ bs list projects
-:::</p>
-<p>::: highlight
-    # To get list app session
-:::</p>
-<p>::: highlight
-    $ bs list appsession
-:::</p>
-<h1 id="command-line-referenceanchor-link-command-line-reference">Command-Line Reference<a href="#Command-Line-Reference">¶</a>{.anchor-link} {#Command-Line-Reference}</h1>
+<h2 id="install-basespace-sequence-hub-cli">Install BaseSpace Sequence Hub CLI</h2>
+<p>Documentation: <a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview">https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview</a></p>
+<p>Installation for Linux is given below.</p>
+<h3 id="installation-for-linux">Installation for Linux</h3>
+<pre class="codehilite"><code class="language-bash"># make directory
+$ mkdir -p $HOME/bin
+$ wget &quot;https://launch.basespace.illumina.com/CLI/latest/amd64-linux/bs&quot; -O $HOME/bin/bs
+
+# file permissions
+$ chmod u+x $HOME/bin/bs
+</code></pre>
+
+<h3 id="authenticate-to-eu-server">Authenticate to EU server</h3>
+<pre class="codehilite"><code class="language-bash">$ bs auth --api-server https://api.euc1.sh.basespace.illumina.com
+</code></pre>
+
+<p>You will get a URL — paste it into a browser to complete authentication.</p>
+<h3 id="inspect-the-token">Inspect the token</h3>
+<pre class="codehilite"><code class="language-bash">$ bs whoami
+</code></pre>
+
+<h3 id="configure-the-server-to-eu">Configure the server to EU</h3>
+<pre class="codehilite"><code class="language-bash">$ eval $(bs load config eu)
+
+# list projects
+$ bs list projects
+
+# list app sessions
+$ bs list appsession
+</code></pre>
+
+<h2 id="command-line-reference">Command-Line Reference</h2>
 <p><a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-examples#FASTQupload">https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-examples#FASTQupload</a></p>
-<h2 id="upload-and-download-filesanchor-link-upload-and-download-files">Upload and download files<a href="#Upload-and-download-files">¶</a>{.anchor-link} {#Upload-and-download-files}</h2>
-<p>::: highlight
-    # To upload folder /files
-:::</p>
-<p>::: highlight
-    $ bs upload dataset -p <ProjectID> --recursive .
-:::</p>
-<p>::: highlight
-    # To download a complete project
-:::</p>
-<p>::: highlight
-    $ bs download project -i <ProjectID> -o <output>
-:::</p>
-<p>::: highlight
-    # To download specific data
-:::</p>
-<p>::: highlight
-    $ bs download appsession --id <APPSESSION_ID> --output <LOCAL_FOLDER>
-:::
-:::</p>
-<p>::: {#imgModal}
-[×]{#imgModalClose title="Close (ESC)"} <img alt="Enlarged
-figure" src="" />{#imgModalContent}
-:::</p>
+<h3 id="upload-and-download-files">Upload and download files</h3>
+<pre class="codehilite"><code class="language-bash"># upload folder /files
+$ bs upload dataset -p &lt;ProjectID&gt; --recursive .
+
+# download a complete project
+$ bs download project -i &lt;ProjectID&gt; -o &lt;output&gt;
+
+# download specific data
+$ bs download appsession --id &lt;APPSESSION_ID&gt; --output &lt;LOCAL_FOLDER&gt;
+</code></pre>
   </div>
 
   <p style="margin-top:2rem"><a href="../tutorials.html">← Back to all tutorials</a></p>
