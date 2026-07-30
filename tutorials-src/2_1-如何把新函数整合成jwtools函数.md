@@ -22,7 +22,7 @@ cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_prev
 #'
 #' @param seurat_obj A Seurat object，其 `@meta.data` 中需包含 `dataset_origin` 列。
 #' @param old_levels Character vector. 需要被重命名的原始 factor levels。
-#'   默认对应 LungAgingERV 项目的三个数据来源。
+#'   默认对应 Aging 项目的三个数据来源。
 #' @param new_labels Character vector. 新的标准化标签，按位置与 `old_levels` 一一对应。
 #'   长度必须与 `old_levels` 一致。
 #' @param backup Logical. 若为 `TRUE`（默认），在修改前保存一份 `.rds` 备份。
@@ -33,7 +33,7 @@ cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_prev
 #' @return 修改后的 Seurat 对象，`dataset_origin` 已标准化。
 #'
 #' @details
-#' 默认重命名方案（LungAgingERV 项目）：
+#' 默认重命名方案（Aging 项目）：
 #' \itemize{
 #'   \item `Kaminski_2020_Adams` -> `Adams_2020`（Sci Adv, Kaminski lab, Yale）
 #'   \item `Banovich_2019_Habermann` -> `Habermann_2020`（Sci Adv, Banovich/Kropski lab；
@@ -164,5 +164,5 @@ immune.combined <- rename_dataset_origin(immune.combined)
 #>          XXXXX          XXXXX          XXXXX
 ```
 
-一行代码即可完成"备份 + 重命名 + 验证"三步操作，且这个函数具有通用性——未来若您的其他项目（如 HeartERVmap、PH-ERVAtlas）也需要类似的数据集来源重命名逻辑，只需修改 `old_levels`/`new_labels` 参数即可复用，无需重写代码。
+一行代码即可完成"备份 + 重命名 + 验证"三步操作，且这个函数具有通用性——未来若您的其他项目,也需要类似的数据集来源重命名逻辑，只需修改 `old_levels`/`new_labels` 参数即可复用，无需重写代码。
 
