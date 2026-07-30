@@ -3,6 +3,15 @@
 
 const tutorialsData = [
   {
+    date: "2026-07-30",
+    title: "DRAGEN 分析",
+    summary: "DRAGEN Single Cell RNA 分析踩坑记录：BaseSpace 表单必填项排查、PIPseq 条码架构解读、UMI 长度异常核实全过程。",
+    url: "tutorials/2_3-DRAGEN \u5206\u6790.html",
+    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
+    type: "tutorial",
+    tags: ["Jian Wu", "jwtools", "PH project", "DRAGEN", "Illumina"]
+  },
+  {
     date: "2026-07-29",
     title: "Illumina BaseSpace: scRNA-seq Analysis with the DRAGEN Pipeline",
     summary: "介绍如何在 Illumina BaseSpace 平台上使用 DRAGEN Single Cell RNA 流程分析 scRNA-seq 数据，涵盖账号注册、CLI 安装配置，以及项目文件的上传下载操作。",
