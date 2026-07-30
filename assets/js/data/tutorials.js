@@ -12,15 +12,6 @@ const tutorialsData = [
     tags: ["Jian Wu", "jwtools", "Illumina", "BaseSpace", "DRAGEN", "scRNA-seq", "CLI"]
   },
   {
-    date: "2026-07-19",
-    title: "logo 素材",
-    summary: "整理 Jian Wu / jwtools 品牌 logo 的全部产出版本，涵盖横排字标、方形字标、竖版组合三大系列及各场合适配尺寸（GitHub、社交媒体、PPT、邮件签名等）。",
-    url: "tutorials/52_logo\u7d20\u6750.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
-    type: "tutorial",
-    tags: ["Jian Wu", "jwtools", "R", "Seurat", "标签3"]
-  },
-  {
     date: "2026-07-18",
     title: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板",
     summary: "科研 AI 提示词库：代码调试 / 图表规范 / 论文写作全场景模板. 整理自 Gemini/Claude/ChatGPT 的科研提示词合集，涵盖 R/Python 代码续写与调试、单细胞分析、图表美化、Nature 风格论文写作等场景，可直接复用。",
@@ -34,15 +25,6 @@ const tutorialsData = [
     title: "如何把新函数整合成jwtools函数",
     summary: "记录如何将新写的 R 函数按 roxygen2 + testthat 规范整合进 jwtools 包，含依赖声明、文档生成与测试流程。",
     url: "tutorials/2_1-\u5982\u4f55\u628a\u65b0\u51fd\u6570\u6574\u5408\u6210jwtools\u51fd\u6570.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_preview.png",
-    type: "tutorial",
-    tags: ["Jian Wu", "R", "Seurat", "jwtools"]
-  },
-  {
-    date: "2026-07-17",
-    title: "build_table1_hlca_format函数",
-    summary: "将 LungAgingERV 中构建 Table 1（HLCA 格式）的脚本重构为 jwtools 包函数 build_table1_hlca_format()，支持可配置白名单、可插拔 subject_ID 解析器，跨项目复用。",
-    url: "tutorials/3_build_table1_hlca_format\u51fd\u6570.html",
     cover: "https://jianwu-atlas.github.io/assets/img/logos/jwtools_logo_social_preview.png",
     type: "tutorial",
     tags: ["Jian Wu", "R", "Seurat", "jwtools"]
@@ -73,32 +55,5 @@ const tutorialsData = [
     cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
     type: "tutorial",
     tags: ["Jian Wu", "AI", "记忆管理", "工具"]
-  },
-  {
-    date: "2026-07-16",
-    title: "如何上传模版文件",
-    summary: "这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
-    url: "tutorials/\u5982\u4f55\u4e0a\u4f20\u6a21\u7248\u6587\u4ef6.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
-    type: "tutorial",
-    tags: ["R", "Seurat", "标签3"]
-  },
-  {
-    date: "2025-11-20",
-    title: "模版",
-    summary: "模版: 这里写一句话摘要，会显示在列表卡片和搜索引擎摘要里，建议 1-2 句话，不超过 150 字符左右。",
-    url: "tutorials/\u6a21\u7248.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
-    type: "tutorial",
-    tags: ["R", "Seurat", "标签3"]
-  },
-  {
-    date: "2025-11-13",
-    title: "Markdown-to-HTML build pipelines模版",
-    summary: "This is a test entry to verify the Markdown-to-HTML build pipeline works correctly.",
-    url: "tutorials/Markdown-to-HTML\u6a21\u7248.html",
-    cover: "https://jianwu-atlas.github.io/assets/img/logos/Jian_Wu_logo.png",
-    type: "tutorial",
-    tags: ["Test"]
   }
 ];
